@@ -457,3 +457,8 @@ input:focus {
     opacity: 0.6;
   }
 }
+.header-solid {
+  background: var(--color-card);
+  border-bottom: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-sm);
+}

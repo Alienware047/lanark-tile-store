@@ -1,11 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 import Reveal from "@/components/UI/Reveal";
 import { ServicesSectionProps } from "../types/services";
 import { defaultServices } from "@/lib/serviceData";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 
 export default function ServicesSection({
   backgroundImage = "/assets/images/bg/serviceBg1_1.jpg",
@@ -14,136 +14,197 @@ export default function ServicesSection({
   heading = "Examine Contemporary Tiles, Stone, & Consulting",
   services = defaultServices,
 }: ServicesSectionProps) {
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
 
-  const visibleCount = 3; // Number of cards visible at once
-  const cardGap = 24; // gap between cards in px
-
-  const totalItems = [...services, ...services]; // duplicate for infinite loop
-
-  const nextSlide = () => setCurrentIndex((prev) => (prev + 1) % services.length);
-  const prevSlide = () => setCurrentIndex((prev) => (prev - 1 + services.length) % services.length);
-
-  // Autoplay every 4 seconds
-  useEffect(() => {
-    const interval = setInterval(nextSlide, 4000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Calculate card width dynamically
-  const getCardWidth = () => {
-    if (!containerRef.current) return 0;
-    const containerWidth = containerRef.current.offsetWidth;
-    return containerWidth / visibleCount - (cardGap * (visibleCount - 1)) / visibleCount;
+  /* ---------------------------
+     Responsive Card Count
+  --------------------------- */
+  const getVisibleCount = () => {
+    if (typeof window === "undefined") return 3;
+    if (window.innerWidth < 768) return 1;
+    if (window.innerWidth < 1024) return 2;
+    return 3;
   };
 
+  const [visibleCount, setVisibleCount] = useState(getVisibleCount());
+
+  useEffect(() => {
+    const handleResize = () => setVisibleCount(getVisibleCount());
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  /* ---------------------------
+     Infinite Loop Setup
+  --------------------------- */
+  const duplicated = [...services, ...services, ...services];
+  const controls = useAnimation();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [index, setIndex] = useState(services.length);
+  const gap = 24;
+
+  /* ---------------------------
+     Card Width Calculation
+  --------------------------- */
+  const getCardWidth = useCallback(() => {
+    if (!containerRef.current) return 0;
+    const width = containerRef.current.offsetWidth;
+    return width / visibleCount - gap + gap / visibleCount;
+  }, [visibleCount]);
+
+  /* ---------------------------
+     Slide Functions
+  --------------------------- */
+  const slideTo = useCallback(async (i: number) => {
+    setIndex(i);
+    await controls.start({
+      x: -(getCardWidth() + gap) * i,
+      transition: { type: "spring", stiffness: 120, damping: 20 },
+    });
+  }, [controls, getCardWidth]);
+
+  const next = () => slideTo(index + 1);
+  const prev = () => slideTo(index - 1);
+
+  /* ---------------------------
+     True Loop Reset
+  --------------------------- */
+  useEffect(() => {
+    if (index >= services.length * 2) {
+      controls.set({ x: -(getCardWidth() + gap) * services.length });
+      setIndex(services.length);
+    }
+    if (index <= 0) {
+      controls.set({ x: -(getCardWidth() + gap) * services.length });
+      setIndex(services.length);
+    }
+  }, [index, services.length, controls, getCardWidth]);
+
+  /* ---------------------------
+     Autoplay
+  --------------------------- */
+  useEffect(() => {
+    const timer = setInterval(next, 4000);
+    return () => clearInterval(timer);
+  });
+
+  /* ---------------------------
+     Swipe / Drag Handling
+  --------------------------- */
+  const dragEnd = (_: any, info: any) => {
+    if (info.offset.x < -50) next();
+    if (info.offset.x > 50) prev();
+  };
+
+  /* ---------------------------
+     UI
+  --------------------------- */
   return (
     <section
-      className="relative py-16 md:py-24 lg:py-32 bg-cover bg-center border-y border-[var(--color-border)]"
+      className="relative py-24 bg-cover bg-center"
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
-      <div className="absolute inset-0 bg-black/40"></div>
+      {/* Overlay */}
+      <div className="absolute inset-0 bg-black/60" />
+
       <div className="container mx-auto px-6 relative z-10">
         {/* Header */}
-        <div className="flex flex-col lg:flex-row justify-between items-end mb-16">
-          <div className="lg:w-1/2">
-            <Reveal type="fade" delay={300}>
-              <div className="section-title text-left">
-                <div className="text-[var(--secondary)] flex items-center gap-3 mb-3 font-semibold text-sm tracking-widest uppercase">
-                  <Image src={subtitleImg} width={24} height={24} alt="icon" />
-                  {subtitleText}
-                </div>
-                <h2 className="text-white text-3xl md:text-4xl lg:text-5xl font-bold mt-4 leading-tight max-w-2xl">
-                  {heading}
-                </h2>
-              </div>
-            </Reveal>
-          </div>
-
-          {/* Navigation Arrows */}
-          <div className="lg:w-1/2 flex justify-start lg:justify-end mt-8 lg:mt-0 gap-3">
-  {/* Previous Button */}
-  <button
-    onClick={prevSlide}
-    className="w-12 h-12 rounded-full bg-white/10 hover:bg-[var(--color-primary)] text-white transition-all duration-300 flex items-center justify-center border border-white/20 hover:border-[var(--color-primary)] shadow-lg hover:shadow-xl transform hover:scale-110"
-    aria-label="Previous Slide"
-  >
-    <span className="flex items-center justify-center w-full h-full">
-      <i className="fa-solid fa-arrow-left-long text-lg"></i>
-    </span>
-  </button>
-
-  {/* Next Button */}
-  <button
-    onClick={nextSlide}
-                className="w-12 h-12 rounded-full bg-[var(--color-primary)] hover:bg-[var(--primary-hover)] text-white transition-all duration-300 flex items-center justify-center border border-[var(--color-primary)] shadow-lg hover:shadow-xl transform hover:scale-110"
-                aria-label="Next Slide"
-            >
-                <span className="flex items-center justify-center w-full h-full">
-                <i className="fa-solid fa-arrow-right-long text-lg"></i>
-                </span>
-            </button>
+        <Reveal>
+          <div className="mb-14">
+            <div className="flex items-center gap-3 text-white">
+              <Image src={subtitleImg} width={24} height={24} alt="" />
+              {subtitleText}
             </div>
+            <h2 className="text-white text-4xl font-bold mt-3">
+              {heading}
+            </h2>
+          </div>
+        </Reveal>
 
-        </div>
-
-        {/* Carousel */}
-        <div ref={containerRef} className="overflow-hidden relative">
-          <motion.div
-            className="flex gap-6"
-            animate={{
-              x: `-${(currentIndex * (getCardWidth() + cardGap))}px`,
-            }}
-            transition={{ type: "spring", stiffness: 200, damping: 30 }}
+        {/* Slider */}
+        <div ref={containerRef} className="relative overflow-visible">
+          {/* Navigation Buttons */}
+          <button
+            onClick={prev}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-30 w-12 h-12 bg-[var(--body)] shadow-lg rounded-full hover:bg-[var(--theme-primary)] hover:text-white transition"
           >
-            {totalItems.map((service, i) => (
-              <Reveal key={i} type="fade" delay={100 + (i % services.length) * 100}>
-                <div
-                  style={{ width: getCardWidth() }}
-                  className="bg-card rounded-2xl overflow-hidden border border-[var(--color-border)] shadow-md hover:shadow-xl transition-all duration-300 hover:border-[var(--color-primary)] transform hover:-translate-y-1 flex-shrink-0"
-                >
-                  {/* Icon Section */}
-                  <div className="relative p-6 bg-gradient-to-br from-[var(--primary-light)] to-white">
-                    <div className="flex items-center justify-center w-14 h-14 rounded-lg bg-white shadow-md">
-                      <Image src={service.icon} width={32} height={32} alt="icon" />
-                    </div>
-                  </div>
+            ←
+          </button>
 
-                  {/* Content Section */}
-                  <div className="p-6">
-                    <h3 className="text-lg font-semibold text-foreground mb-4 line-clamp-2">
-                      <a
-                        href={service.link}
-                        className="hover:text-primary transition-colors"
-                      >
-                        {service.title}
-                      </a>
-                    </h3>
+          <button
+            onClick={next}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-30 w-12 h-12 bg-[var(--body)] shadow-lg rounded-full hover:bg-[var(--theme-primary)] hover:text-white transition"
+          >
+            →
+          </button>
 
-                    {/* Thumbnail */}
-                    <div className="relative w-full h-40 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-                      <Image
-                        src={service.thumb}
-                        fill
-                        alt={service.title}
-                        className="object-cover hover:scale-105 transition-transform duration-300"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Footer CTA */}
-                  <div className="px-6 pb-6 pt-3 border-t border-[var(--color-border)]">
-                    <a
-                      href={service.link}
-                      className="text-sm font-semibold text-primary hover:text-primary-hover flex items-center gap-2 transition-colors"
-                    >
-                      Learn More
-                      <i className="fa-solid fa-arrow-right text-xs"></i>
-                    </a>
+          {/* Track */}
+          <motion.div
+            drag="x"
+            onDragEnd={dragEnd}
+            animate={controls}
+            className="flex gap-6 cursor-grab active:cursor-grabbing py-12"
+          >
+            {duplicated.map((service, i) => (
+              <div
+                key={i}
+                style={{ width: getCardWidth() }}
+                className="
+                  relative
+                  pt-28
+                  pb-8
+                  px-6
+                  flex-shrink-0
+                  rounded-3xl
+                  bg-[var(--body)]
+                  shadow-[0_15px_50px_rgba(0,0,0,0.25)]
+                  hover:-translate-y-3
+                  transition-all duration-500
+                  flex flex-col items-center text-center
+                  min-h-[460px]
+                  overflow-visible
+                "
+              >
+                {/* Icon */}
+                <div className="absolute -top-12">
+                  <div className="
+                    w-24 h-24
+                    bg-gradient-to-br from-[var(--theme-primary)] to-[var(--theme-secondary)]
+                    rounded-2xl
+                    flex items-center justify-center
+                    shadow-xl
+                  ">
+                    <Image src={service.icon} width={40} height={40} alt={service.title} />
                   </div>
                 </div>
-              </Reveal>
+
+                {/* Title */}
+                <h3 className="mt-6 font-semibold text-xl text-white">
+                  {service.title}
+                </h3>
+
+                {/* Image */}
+                <div className="relative h-44 w-full mt-6 rounded-xl overflow-hidden">
+                  <Image src={service.thumb} fill alt={service.title} className="object-cover" />
+                </div>
+
+                {/* Rounded CTA Button */}
+                <a
+                  href={service.link}
+                  className="
+                    mt-auto
+                    w-14 h-14
+                    flex items-center justify-center
+                    bg-[var(--theme-primary)]
+                    text-white text-xl
+                    rounded-xl
+                    hover:bg-[var(--theme-secondary)]
+                    transition
+                  "
+                >
+                  →
+                </a>
+              </div>
             ))}
           </motion.div>
         </div>
