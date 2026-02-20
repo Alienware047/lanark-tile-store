@@ -41,6 +41,7 @@ export default function ServicesSection({
   const controls = useAnimation();
   const containerRef = useRef<HTMLDivElement>(null);
   const [index, setIndex] = useState(services.length);
+  const [isTransitioning, setIsTransitioning] = useState(true);
   const gap = 24;
 
   /* ---------------------------
@@ -55,13 +56,22 @@ export default function ServicesSection({
   /* ---------------------------
      Slide Functions
   --------------------------- */
-  const slideTo = useCallback(async (i: number) => {
-    setIndex(i);
-    await controls.start({
-      x: -(getCardWidth() + gap) * i,
-      transition: { type: "spring", stiffness: 120, damping: 20 },
-    });
-  }, [controls, getCardWidth]);
+  const slideTo = useCallback(
+    async (i: number, smooth: boolean = true) => {
+      setIndex(i);
+      if (smooth) {
+        setIsTransitioning(true);
+        await controls.start({
+          x: -(getCardWidth() + gap) * i,
+          transition: { type: "spring", stiffness: 120, damping: 20 },
+        });
+      } else {
+        controls.set({ x: -(getCardWidth() + gap) * i });
+      }
+      setIsTransitioning(false);
+    },
+    [controls, getCardWidth]
+  );
 
   const next = () => slideTo(index + 1);
   const prev = () => slideTo(index - 1);
@@ -71,22 +81,31 @@ export default function ServicesSection({
   --------------------------- */
   useEffect(() => {
     if (index >= services.length * 2) {
-      controls.set({ x: -(getCardWidth() + gap) * services.length });
-      setIndex(services.length);
+      // Jump back to the first duplicate set seamlessly
+      slideTo(services.length, false);
     }
-    if (index <= 0) {
-      controls.set({ x: -(getCardWidth() + gap) * services.length });
-      setIndex(services.length);
+    if (index < 0) {
+      // Jump to end seamlessly when going backwards
+      slideTo(services.length, false);
     }
-  }, [index, services.length, controls, getCardWidth]);
+  }, [index, services.length, slideTo]);
 
   /* ---------------------------
      Autoplay
   --------------------------- */
   useEffect(() => {
-    const timer = setInterval(next, 4000);
+    const timer = setInterval(() => {
+      setIndex((prevIndex) => prevIndex + 1);
+    }, 4000);
     return () => clearInterval(timer);
-  });
+  }, []);
+
+  /* ---------------------------
+     Index Change Handler
+  --------------------------- */
+  useEffect(() => {
+    slideTo(index, isTransitioning);
+  }, [index, isTransitioning, slideTo]);
 
   /* ---------------------------
      Swipe / Drag Handling
@@ -101,7 +120,7 @@ export default function ServicesSection({
   --------------------------- */
   return (
     <section
-      className="relative py-24 bg-cover bg-center"
+      className="relative w-full py-24 bg-cover bg-center overflow-hidden"
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
       {/* Overlay */}
@@ -122,7 +141,7 @@ export default function ServicesSection({
         </Reveal>
 
         {/* Slider */}
-        <div ref={containerRef} className="relative overflow-visible">
+        <div ref={containerRef} className="relative overflow-hidden">
           {/* Navigation Buttons */}
           <button
             onClick={prev}
@@ -142,8 +161,10 @@ export default function ServicesSection({
           <motion.div
             drag="x"
             onDragEnd={dragEnd}
+            dragElastic={0.2}
+            dragConstraints={{ left: -10000, right: 10000 }}
             animate={controls}
-            className="flex gap-6 cursor-grab active:cursor-grabbing py-12"
+            className="flex gap-6 cursor-grab active:cursor-grabbing py-12 will-change-transform"
           >
             {duplicated.map((service, i) => (
               <div

@@ -1,4 +1,5 @@
 import PublicHeader from "@/components/layout/PublicHeader";
+import PublicFooter from "@/components/layout/PublicFooter";
 // import Footer from "@/components/layout/Footer";
 
 export const metadata = {
@@ -20,6 +21,7 @@ export default function SitesLayout({
       <main className="pt-24">{children}</main>
 
       {/* Footer */}
+      <PublicFooter />
       {/* <Footer /> */}
     </>
   );
