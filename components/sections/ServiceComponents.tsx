@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { motion, useAnimation } from "framer-motion";
 import Reveal from "@/components/UI/Reveal";
-import { ServicesSectionProps } from "../types/services";
+import { ServicesSectionProps } from "../../types/services";
 import { defaultServices } from "@/lib/serviceData";
 import { useEffect, useState, useRef, useCallback } from "react";
 

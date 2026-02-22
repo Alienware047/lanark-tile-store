@@ -35,7 +35,8 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="footer-section relative bg-color1 text-gray-800">
+    <footer className="footer-section relative bg-color1 text-[var(--text-main)]">
+
       {/* Top Brand Logos Row */}
       <div className="container mx-auto py-6 flex flex-wrap justify-center gap-4">
         {brandLogos.map((logo, idx) => (
@@ -45,104 +46,245 @@ export default function Footer() {
         ))}
       </div>
 
+
       {/* Footer Widgets */}
       <div className="footer-widgets-wrapper py-10">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+
           {/* Logo + About */}
-          <div className="single-footer-widget wow fadeInUp" data-wow-delay=".2s">
-            <div className="widget-head mb-4">
-              <a href="index.html" className="inline-block">
-                <Image src="/assets/images/logo/logo4.svg" alt="logo" width={150} height={50} />
-              </a>
+          <div>
+            <div className="mb-4">
+              <Image src="/assets/images/logo/logo4.svg" alt="logo" width={150} height={50} />
             </div>
-            <p className="mb-4">
-              There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some
+
+            <p className="mb-4 text-[var(--text-muted)]">
+              There are many variations of passages of Lorem Ipsum available
             </p>
+
             <div className="flex space-x-3">
-              <a href="#" className="hover:text-theme-color transition"><Facebook size={20} /></a>
-              <a href="#" className="hover:text-theme-color transition"><Twitter size={20} /></a>
-              <a href="#" className="hover:text-theme-color transition"><Linkedin size={20} /></a>
-              <a href="#" className="hover:text-theme-color transition"><Youtube size={20} /></a>
+
+              <a className="text-[var(--text-main)] hover:text-[var(--theme-primary)] transition">
+                <Facebook size={20} />
+              </a>
+
+              <a className="text-[var(--text-main)] hover:text-[var(--theme-primary)] transition">
+                <Twitter size={20} />
+              </a>
+
+              <a className="text-[var(--text-main)] hover:text-[var(--theme-primary)] transition">
+                <Linkedin size={20} />
+              </a>
+
+              <a className="text-[var(--text-main)] hover:text-[var(--theme-primary)] transition">
+                <Youtube size={20} />
+              </a>
+
             </div>
           </div>
 
-          {/* Explore Links */}
-          <div className="single-footer-widget wow fadeInUp" data-wow-delay=".4s">
-            <h3 className="flex items-center mb-4">
-              <Image src="/assets/images/shape/footertitleShape1_1.png" alt="shape" width={20} height={20} className="me-1 mr-2" />
+
+
+          {/* Explore */}
+          <div>
+
+            <h3 className="flex items-center mb-4 font-semibold">
+
+              <Image
+                src="/assets/images/shape/footertitleShape1_1.png"
+                alt=""
+                width={20}
+                height={20}
+                className="mr-2"
+              />
+
               Explore
+
             </h3>
+
+
             <ul className="space-y-2">
+
               {exploreLinks.map((link, idx) => (
+
                 <li key={idx}>
-                  <a href={link.href} className="flex items-center gap-2 hover:text-theme-color transition">
-                    <ChevronRight size={16} /> {link.name}
+
+                  <a className="flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--theme-primary)] transition">
+
+                    <ChevronRight
+                      size={16}
+                      className="text-[var(--theme-primary)]"
+                    />
+
+                    {link.name}
+
                   </a>
+
                 </li>
+
               ))}
+
             </ul>
+
           </div>
 
-          {/* Services Links */}
-          <div className="single-footer-widget wow fadeInUp" data-wow-delay=".6s">
-            <h3 className="flex items-center mb-4">
-              <Image src="/assets/images/shape/footertitleShape1_1.png" alt="shape" width={20} height={20} className="me-1 mr-2" />
+
+
+          {/* Services */}
+          <div>
+
+            <h3 className="flex items-center mb-4 font-semibold">
+
+              <Image
+                src="/assets/images/shape/footertitleShape1_1.png"
+                alt=""
+                width={20}
+                height={20}
+                className="mr-2"
+              />
+
               Services
+
             </h3>
+
+
             <ul className="space-y-2">
+
               {servicesLinks.map((service, idx) => (
+
                 <li key={idx}>
-                  <a href="service-details.html" className="flex items-center gap-2 hover:text-theme-color transition">
-                    <ChevronRight size={16} /> {service}
+
+                  <a className="flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--theme-primary)] transition">
+
+                    <ChevronRight
+                      size={16}
+                      className="text-[var(--theme-primary)]"
+                    />
+
+                    {service}
+
                   </a>
+
                 </li>
+
               ))}
+
             </ul>
+
           </div>
 
-          {/* Contact Info */}
-          <div className="single-footer-widget wow fadeInUp" data-wow-delay=".8s">
-            <h3 className="flex items-center mb-4">
-              <Image src="/assets/images/shape/footertitleShape1_1.png" alt="shape" width={20} height={20} className="me-1 mr-2" />
+
+
+          {/* Contact */}
+          <div>
+
+            <h3 className="flex items-center mb-4 font-semibold">
+
+              <Image
+                src="/assets/images/shape/footertitleShape1_1.png"
+                alt=""
+                width={20}
+                height={20}
+                className="mr-2"
+              />
+
               Get In Touch
+
             </h3>
+
+
             <ul className="space-y-3">
+
+
               <li>
-                <a href="https://www.google.com/maps/place/Egens+Lab/@23.8340712,90.3631117,17z" className="flex items-center gap-2 hover:text-theme-color transition">
-                  <MapPin size={18} className="text-theme-color" />
+
+                <a className="flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--theme-primary)] transition">
+
+                  <MapPin
+                    size={18}
+                    className="text-[var(--theme-primary)]"
+                  />
+
                   6391 Elgin St. Celina, USA
+
                 </a>
+
               </li>
+
+
+
               <li>
-                <a href="tel:0123456789101" className="flex items-center gap-2 hover:text-theme-color transition">
-                  <Phone size={18} className="text-theme-color" />
+
+                <a className="flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--theme-primary)] transition">
+
+                  <Phone
+                    size={18}
+                    className="text-[var(--theme-primary)]"
+                  />
+
                   +208-666-0112
+
                 </a>
+
               </li>
+
+
+
               <li>
-                <a href="mailto:Infotech@gmail.com" className="flex items-center gap-2 hover:text-theme-color transition">
-                  <Mail size={18} className="text-theme-color" />
+
+                <a className="flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--theme-primary)] transition">
+
+                  <Mail
+                    size={18}
+                    className="text-[var(--theme-primary)]"
+                  />
+
                   floremh@gmail.com
+
                 </a>
+
               </li>
+
+
             </ul>
+
           </div>
+
+
         </div>
       </div>
 
-      {/* Footer Bottom */}
+
+
+      {/* Bottom */}
       <div className="footer-bottom bg-color2 py-4">
-        <div className="container mx-auto flex flex-col md:flex-row justify-between items-center gap-3">
-          <p className="wow fadeInLeft" data-wow-delay=".3s">© All Copyright 2024 by Florem</p>
-          <ul className="flex gap-4 wow fadeInRight" data-wow-delay=".5s">
+
+        <div className="container mx-auto flex justify-between items-center">
+
+          <p className="text-[var(--text-muted)]">
+            © All Copyright 2024 by Florem
+          </p>
+
+
+          <div className="flex gap-4">
+
             {bottomLinks.map((link, idx) => (
-              <li key={idx}>
-                <a href={link.href} className="text-white hover:text-theme-color transition">{link.name}</a>
-              </li>
+
+              <a
+                key={idx}
+                className="text-[var(--text-muted)] hover:text-[var(--theme-secondary)] transition"
+              >
+                {link.name}
+              </a>
+
             ))}
-          </ul>
+
+          </div>
+
         </div>
+
       </div>
+
     </footer>
   );
 }

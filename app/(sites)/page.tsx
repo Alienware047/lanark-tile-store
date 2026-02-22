@@ -1,13 +1,13 @@
-import AboutSection from "@/components/AboutSection";
-import Hero from "@/components/hero";
-import ServicesSection from "@/components/ServiceComponents";
-import WhatWeOfferCard from "@/components/WhatWeOfferCard";
-import GallerySection from "@/components/GallerySection"; 
-import ReliableFloorServices from "@/components/ReliableFloorServices";
-import ShopSliderSection from "@/components/ShopSliderSection";
-import TestimonialCarousel from "@/components/Testimonials";
-import ExpertiseSection from "@/components/Expertise";
-import NewsRoom from "@/components/NewsRoom";
+import AboutSection from "@/components/sections/AboutSection";
+import Hero from "@/components/sections/hero";
+import ServicesSection from "@/components/sections/ServiceComponents";
+import WhatWeOfferCard from "@/components/sections/WhatWeOfferCard";
+import GallerySection from "@/components/sections/GallerySection"; 
+import ReliableFloorServices from "@/components/sections/ReliableFloorServices";
+import ShopSliderSection from "@/components/sections/ShopSliderSection";
+import TestimonialCarousel from "@/components/sections/Testimonials";
+import ExpertiseSection from "@/components/sections/Expertise";
+import NewsRoom from "@/components/sections/NewsRoom";
 
 export const metadata = {
   title: "Larnark - Home",
