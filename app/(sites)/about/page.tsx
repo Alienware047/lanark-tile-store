@@ -1,7 +1,11 @@
-
-import ABoutHero from "@/components/sections/AboutHero";
 import AboutUsSection from "@/components/sections/AboutUsSection";
 import CompanySection from "@/components/sections/CompanySection";
+import FactsSection from "@/components/sections/FactsSection";
+import Testimonials from "@/components/sections/Testimonials";
+import ExperienceSection from "@/components/sections/ExperienceSection";
+import ValueSection from "@/components/sections/ValueSection";
+import TeamSection from "@/components/sections/TeamsSection";
+import PageHero from "@/components/layout/PageHero";
 
 export const metadata = {
   title: "Larnark - About Us",
@@ -10,9 +14,21 @@ export const metadata = {
 export default function AboutPage() {
 return(
     <div>
-        <ABoutHero />
+        <PageHero
+            title="About"
+            bgImage="/assets/images/bg/breadcumb.jpg"
+            breadcrumbs={[
+                { label: "Home", href: "/" },
+                { label: "About" },
+            ]}
+        />
         <AboutUsSection />
         <CompanySection />
+        <Testimonials />
+        <FactsSection />
+        <ExperienceSection />
+        <ValueSection />
+        <TeamSection />
     </div>
 )
 

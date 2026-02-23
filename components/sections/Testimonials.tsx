@@ -9,23 +9,23 @@ const testimonials = [
     name: "Guy Hawkins",
     role: "UI/UX Designer",
     image: "/images/testimonial/testimonialProfile1_1.png",
-    background: "/images/bg/testimonialBg1_1.png",
+    background: "/assets/images/bg/testimonialBg1_1.png",
     rating: 5,
     text: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by lorem injected humour, or randomised words which",
   },
   {
     name: "Jacob Jones",
     role: "UI/UX Designer",
-    image: "/images/testimonial/testimonialProfile1_2.png",
-    background: "/images/bg/testimonialBg1_1.png",
+    image: "/assets/images/testimonial/testimonialProfile1_2.png",
+    background: "/assets/images/bg/testimonialBg1_1.png",
     rating: 5,
     text: "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by lorem injected humour, or randomised words which",
   },
   {
     name: "Jane Cooper",
     role: "Product Designer",
-    image: "/images/testimonial/testimonialProfile1_1.png",
-    background: "/images/bg/testimonialBg1_1.png",
+    image: "/assets/images/testimonial/testimonialProfile1_1.png",
+    background: "/assets/images/bg/testimonialBg1_1.png",
     rating: 4,
     text: "Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
   },
@@ -68,7 +68,7 @@ export default function TestimonialCarousel() {
         <div className="flex flex-col lg:flex-row items-end justify-between mb-16 gap-6">
           <div className="section-title max-w-lg">
             <div className="flex items-center gap-2 text-[var(--primary)] font-semibold tracking-widest mb-2">
-              <Image src="/images/shape/titleShape1_1.png" width={20} height={20} alt="" />
+              <Image src="/assets/images/shape/titleShape1_1.png" width={20} height={20} alt="" />
               TESTIMONIAL
             </div>
             <h2 className="text-3xl md:text-4xl font-bold leading-tight">
@@ -102,7 +102,7 @@ export default function TestimonialCarousel() {
               style={{ backgroundImage: `url(${currentTestimonial.background})` }}
             >
               <div className="absolute top-0 right-0">
-                <Image src="/images/shape/testimonialCardShape1_1.png" width={50} height={50} alt="" />
+                <Image src="/assets/images/shape/testimonialCardShape1_1.png" width={50} height={50} alt="" />
               </div>
 
               {/* Profile */}
@@ -125,7 +125,7 @@ export default function TestimonialCarousel() {
                   {[...Array(5)].map((_, idx) => (
                     <Image
                       key={idx}
-                      src="/images/icon/starIcon.svg"
+                      src="/assets/images/icon/starIcon.svg"
                       width={16}
                       height={16}
                       alt=""
