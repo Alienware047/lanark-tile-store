@@ -119,6 +119,19 @@ export default function PremiumHeader() {
             ]}
           />
 
+          {/* PAGES */}
+          <Dropdown
+            title="Shop"
+            links={[
+              { name: "Shop", href: "/shop" },
+              { name: "Shop Details", href: "/shop-details" },
+              { name: "Checkout", href: "/checkout" },
+              // { name: "Gallery", href: "/gallery" },
+              // { name: "FAQ", href: "/faq" },
+              // { name: "Login", href: "/login" },
+            ]}
+          />
+
 
           <NavLink href="/contact">Contact</NavLink>
 

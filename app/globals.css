@@ -239,6 +239,32 @@ html {
 }
 
 
+/* =========================================================
+   INPUT STYLES
+========================================================= */
+
+.input {
+  border: 1px solid var(--color-border);
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-size: 0.95rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  width: 100%;
+}
+
+.input::placeholder {
+  color: var(--text-light);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(192, 103, 30, 0.1);
+}
+
+
 
 /* =========================================================
    UTILITIES

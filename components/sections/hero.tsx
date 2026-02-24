@@ -77,7 +77,7 @@ export default function Hero() {
             <Reveal type="scale" delay={300}>
               <div className="hidden md:block absolute -top-10 -left-10 card p-2 shadow-card-lg animate-float">
                 <Image
-                  src="/tiles/tile1.jpg"
+                  src="/assets/images/bg/introBg1_1.jpg"
                   alt="Tile"
                   width={140}
                   height={140}
@@ -90,7 +90,7 @@ export default function Hero() {
             <Reveal type="scale" delay={500}>
               <div className="card shadow-card-lg p-4 z-10">
                 <Image
-                  src="/tiles/hero.jpg"
+                  src="/assets/images/intro/introThumb1_1.png"
                   alt="Tiles"
                   width={500}
                   height={500}
@@ -104,7 +104,7 @@ export default function Hero() {
             <Reveal type="scale" delay={700}>
               <div className="hidden md:block absolute -bottom-10 -right-10 card p-2 shadow-card-lg animate-float-delay">
                 <Image
-                  src="/tiles/tile2.jpg"
+                  src="/assets/images/bg/introBg2_1.jpg"
                   alt="Tile"
                   width={160}
                   height={160}
