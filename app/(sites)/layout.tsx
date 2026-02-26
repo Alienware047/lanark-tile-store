@@ -1,8 +1,8 @@
 import PublicHeader from "@/components/layout/PublicHeader";
 import PublicFooter from "@/components/layout/PublicFooter";
-// import Footer from "@/components/layout/Footer";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Lannark",
   description: "Premium Tiles Marketplace - Clay & Cocoa Brown Theme",
 };
@@ -13,18 +13,19 @@ export default function SitesLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
-      {/* Sticky public header */}
+    <div className="min-h-screen flex flex-col bg-[var(--color-background)]">
+
+      {/* Header */}
       <PublicHeader />
 
-      {/* Main content */}
-      <main>
+      {/* Main Content */}
+      <main className="flex-1">
         {children}
       </main>
 
       {/* Footer */}
       <PublicFooter />
-      {/* <Footer /> */}
-    </>
+
+    </div>
   );
 }

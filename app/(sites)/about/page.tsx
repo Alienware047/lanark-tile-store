@@ -4,7 +4,7 @@ import FactsSection from "@/components/sections/FactsSection";
 import Testimonials from "@/components/sections/Testimonials";
 import ExperienceSection from "@/components/sections/ExperienceSection";
 import ValueSection from "@/components/sections/ValueSection";
-import TeamSection from "@/components/sections/TeamsSection";
+import TeamSection from "@/components/sections/TeamsSliderSection";
 import PageHero from "@/components/layout/PageHero";
 
 export const metadata = {

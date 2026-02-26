@@ -12,8 +12,9 @@ export default function ThemeProvider({
 
    <NextThemesProvider
      attribute="class"
-     defaultTheme="light"
+     defaultTheme="system"
      enableSystem
+    //  disableTransitionOnChange
    >
 
      {children}

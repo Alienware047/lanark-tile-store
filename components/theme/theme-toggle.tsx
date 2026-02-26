@@ -2,7 +2,7 @@
 
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, Laptop } from "lucide-react";
 
 export default function ThemeToggle() {
 
@@ -14,33 +14,51 @@ export default function ThemeToggle() {
     setMounted(true);
   }, []);
 
-
-  // Prevent hydration mismatch
   if (!mounted) return null;
 
 
+  const isSystem = theme === "system";
   const isDark = resolvedTheme === "dark";
+
+
+  function cycleTheme() {
+
+    if (theme === "light") {
+      setTheme("dark");
+    }
+
+    else if (theme === "dark") {
+      setTheme("system");
+    }
+
+    else {
+      setTheme("light");
+    }
+
+  }
 
 
   return (
 
     <button
-
-      onClick={() => setTheme(isDark ? "light" : "dark")}
-
+      onClick={cycleTheme}
+      title={`Theme: ${theme}`}
       className="
       flex items-center justify-center
       w-10 h-10
       rounded-lg
-      bg-card
-      border border-border
-      hover:bg-secondary
+      bg-[var(--color-card)]
+      border border-[var(--color-border)]
+      hover:bg-[var(--primary-light)]
       transition
       "
-
     >
 
-      {isDark ? (
+      {isSystem ? (
+
+        <Laptop size={18} />
+
+      ) : isDark ? (
 
         <Sun size={18} />
 
