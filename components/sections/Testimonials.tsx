@@ -2,7 +2,7 @@
 
 import { useRef, useEffect, useState, useCallback } from "react";
 import Image from "next/image";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, cubicBezier } from "framer-motion";
 
 const testimonials = [
   {
@@ -92,11 +92,11 @@ export default function TestimonialCarousel() {
 
   const slideVariants = {
     enter: (dir: number) => ({ opacity: 0, x: dir > 0 ? 60 : -60 }),
-    center: { opacity: 1, x: 0, transition: { duration: 0.45, ease: [0.22, 1, 0.36, 1] } },
+    center: { opacity: 1, x: 0, transition: { duration: 0.45, ease: cubicBezier(0.22, 1, 0.36, 1) } },
     exit: (dir: number) => ({
       opacity: 0,
       x: dir > 0 ? -60 : 60,
-      transition: { duration: 0.35, ease: [0.22, 1, 0.36, 1] },
+      transition: { duration: 0.35, ease: cubicBezier(0.22, 1, 0.36, 1) },
     }),
   };
 
