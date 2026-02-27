@@ -1,17 +1,19 @@
 "use client";
 
 import Image from "next/image";
-import { checkoutProducts } from "@/lib/checkout-data";
+import { useCart } from "@/components/layout/CartContext";
 
 export default function OrderTable() {
-  const subtotal = checkoutProducts.reduce(
+  const { cart } = useCart();
+
+  const subtotal = cart.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
   );
 
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-6 text-[var(--color-foreground)]">
+      <h2 className="text-xl font-semibold mb-6 mt-10 text-[var(--color-foreground)]">
         Your Order
       </h2>
 
@@ -25,26 +27,34 @@ export default function OrderTable() {
           </thead>
 
           <tbody>
-            {checkoutProducts.map((product) => (
-              <tr key={product.id} className="border-b border-[var(--color-border)] last:border-b-0">
-                <td className="flex items-center gap-4 p-4 text-[var(--color-foreground)]">
-                  <Image
-                    src={product.image}
-                    width={60}
-                    height={60}
-                    alt={product.name}
-                    className="rounded"
-                  />
-                  <div>
-                    <p className="font-medium">{product.name}</p>
-                    <p className="text-sm text-[var(--text-muted)]">x{product.quantity}</p>
-                  </div>
-                </td>
-                <td className="text-right p-4 font-semibold text-[var(--color-foreground)]">
-                  ${(product.price * product.quantity).toFixed(2)}
+            {cart.length > 0 ? (
+              cart.map((product) => (
+                <tr key={product.id} className="border-b border-[var(--color-border)] last:border-b-0">
+                  <td className="flex items-center gap-4 p-4 text-[var(--color-foreground)]">
+                    <Image
+                      src={product.image}
+                      width={60}
+                      height={60}
+                      alt={product.name}
+                      className="rounded"
+                    />
+                    <div>
+                      <p className="font-medium">{product.name}</p>
+                      <p className="text-sm text-[var(--text-muted)]">x{product.quantity}</p>
+                    </div>
+                  </td>
+                  <td className="text-right p-4 font-semibold text-[var(--color-foreground)]">
+                    ${(product.price * product.quantity).toFixed(2)}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={2} className="p-4 text-center text-[var(--text-muted)]">
+                  Your cart is empty
                 </td>
               </tr>
-            ))}
+            )}
           </tbody>
         </table>
 

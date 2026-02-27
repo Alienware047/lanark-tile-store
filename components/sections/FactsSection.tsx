@@ -36,7 +36,7 @@ export default function FactsSection() {
   return (
     <section
       ref={sectionRef}
-      className="py-20 bg-theme-secondary text-white overflow-hidden"
+      className="py-20 bg-theme-secondary overflow-hidden"
     >
       <div className="container mx-auto px-6">
 

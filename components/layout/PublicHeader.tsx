@@ -45,9 +45,9 @@ export default function PremiumHeader() {
 
           <NavLink href="/about">About</NavLink>
 
-          <Dropdown title="Services" links={[{ name: "All Services", href: "/services" }, { name: "Service Details", href: "/service-details" }]} />
+          <NavLink href="/services">Services</NavLink>
           <Dropdown title="Pages" links={[{ name: "Project", href: "/project" }, { name: "Team", href: "/team" }, { name: "Pricing", href: "/pricing" }, { name: "Gallery", href: "/gallery" }, { name: "FAQ", href: "/faq" }, { name: "Login", href: "/login" }]} />
-          <Dropdown title="Shop" links={[{ name: "Shop", href: "/shop" }, { name: "Shop Details", href: "/shop-details" }, { name: "Checkout", href: "/checkout" }]} />
+          <Dropdown title="Shop" links={[{ name: "Shop", href: "/shop" }, { name: "Checkout", href: "/checkout" }]} />
 
           <NavLink href="/contact">Contact</NavLink>
         </nav>
@@ -150,7 +150,7 @@ export default function PremiumHeader() {
                   title="Shop"
                   links={[
                     { name: "Shop", href: "/shop" },
-                    { name: "Shop Details", href: "/shop-details" },
+                    // { name: "Shop Details", href: "/shop-details" },
                     { name: "Checkout", href: "/checkout" },
                   ]}
                 />

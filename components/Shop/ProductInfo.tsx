@@ -3,12 +3,25 @@
 import { useState } from "react";
 import Reveal from "@/components/UI/Reveal";
 import { Star, Plus, Minus, Heart } from "lucide-react";
+import { useCart } from "@/components/layout/CartContext";
 
 export default function ProductInfo({ product }: any) {
   const [qty, setQty] = useState(1);
   const [isWishlisted, setIsWishlisted] = useState(false);
+  const { addItem, toggleCart } = useCart();
 
   const rating = Math.round(product.rating);
+
+  const handleAddToCart = () => {
+    const cartItem = {
+      id: parseInt(product.id),
+      name: product.name,
+      price: product.price,
+      image: product.image,
+    };
+    addItem(cartItem, qty);
+    toggleCart();
+  };
 
   return (
     <Reveal delay={0.2}>
@@ -57,7 +70,10 @@ export default function ProductInfo({ product }: any) {
 
         {/* Buttons */}
         <div className="flex gap-4">
-          <button className="flex-1 bg-[var(--color-primary)] text-[var(--color-primary-foreground)] py-3 rounded-lg hover:bg-[var(--primary-hover)] transition-all font-semibold">
+          <button 
+            onClick={handleAddToCart}
+            className="flex-1 bg-[var(--color-primary)] text-[var(--color-primary-foreground)] py-3 rounded-lg hover:bg-[var(--primary-hover)] transition-all font-semibold"
+          >
             Add to Cart
           </button>
 

@@ -2,7 +2,9 @@
 
 import Image from "next/image";
 import Reveal from "@/components/UI/Reveal";
+import { useCart } from "@/components/layout/CartContext";
 import type { Product } from "@/types/product";
+import Link from "next/link";
 
 interface ShopSectionProps {
   products: Product[];
@@ -15,11 +17,15 @@ export default function ShopSection({ products }: ShopSectionProps) {
         {products.length > 0 ? (
           products.map((product, index) => (
             <Reveal key={product.id} delay={index * 0.1}>
-              <ProductCard product={product} />
+              <Link href={`/shop/${product.id}`} className="block group">
+                <ProductCard product={product} />
+              </Link>
             </Reveal>
           ))
         ) : (
-          <p className="col-span-full text-center text-[var(--text-light)] py-12">No products found</p>
+          <p className="col-span-full text-center text-[var(--text-light)] py-12">
+            No products found
+          </p>
         )}
       </div>
     </section>
@@ -31,6 +37,19 @@ interface ProductCardProps {
 }
 
 function ProductCard({ product }: ProductCardProps) {
+  const { addItem, toggleCart } = useCart();
+
+  const handleAddToCart = () => {
+    const cartItem = {
+      id: parseInt(product.id),
+      name: product.name,
+      price: product.price,
+      image: product.image,
+    };
+    addItem(cartItem);
+    toggleCart();
+  };
+
   return (
     <div className="card group overflow-hidden hover-lift h-full flex flex-col">
       {/* Image */}
@@ -55,6 +74,7 @@ function ProductCard({ product }: ProductCardProps) {
         </div>
 
         <button
+          onClick={handleAddToCart}
           className="
           mt-auto
           w-full

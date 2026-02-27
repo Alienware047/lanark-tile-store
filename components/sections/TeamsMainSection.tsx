@@ -4,17 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Reveal from "@/components/UI/Reveal";
-
-const team = [
-  { name: "Masirul Alexander", role: "Head Manager",      image: "/assets/images/team/teamThumb2_1.jpg" },
-  { name: "Guy Hawkins",       role: "Senior Designer",   image: "/assets/images/team/teamThumb2_2.jpg" },
-  { name: "Leslie Alexander",  role: "Project Lead",      image: "/assets/images/team/teamThumb2_3.jpg" },
-  { name: "Brooklyn Simmons",  role: "Tile Specialist",   image: "/assets/images/team/teamThumb2_4.jpg" },
-  { name: "Esther Howard",     role: "Interior Advisor",  image: "/assets/images/team/teamThumb2_5.jpg" },
-  { name: "Eleanor Pena",      role: "Operations Manager",image: "/assets/images/team/teamThumb2_6.jpg" },
-  { name: "Arlene McCoy",      role: "Creative Director", image: "/assets/images/team/teamThumb2_7.jpg" },
-  { name: "Marvin McKinney",   role: "Sales Executive",   image: "/assets/images/team/teamThumb2_8.jpg" },
-];
+import { team } from "@/lib/Team-data";
 
 const FacebookIcon = () => (
   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
@@ -106,9 +96,10 @@ export default function TeamSection() {
         {/* ── GRID ─────────────────────────────────────────────────── */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {team.map((member, i) => (
-            <div
-              key={i}
-              className="team-card team-card-anim group relative rounded-2xl overflow-hidden bg-[var(--color-card)] border border-[var(--color-border)] cursor-pointer"
+            <Link
+              key={member.id}
+              href={`/team/${member.id}`}
+              className="team-card team-card-anim group relative rounded-2xl overflow-hidden bg-[var(--color-card)] border border-[var(--color-border)] cursor-pointer block"
               style={{ animationDelay: `${i * 0.06}s` }}
               onMouseLeave={() => setOpenSocial(null)}
             >
@@ -133,22 +124,23 @@ export default function TeamSection() {
                       { icon: <TwitterIcon />,  label: "Twitter"  },
                       { icon: <LinkedInIcon />, label: "LinkedIn" },
                     ].map(({ icon, label }, si) => (
-                      <a
+                      <button
                         key={label}
-                        href="#"
+                        type="button"
                         title={label}
+                        onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
                         className="soc-icon w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm text-white flex items-center justify-center border border-white/30"
                         style={{ transitionDelay: `${si * 0.05}s` }}
                       >
                         {icon}
-                      </a>
+                      </button>
                     ))}
                   </div>
                 </div>
 
                 {/* SHARE TOGGLE — top right */}
                 <button
-                  onClick={() => setOpenSocial(openSocial === i ? null : i)}
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); setOpenSocial(openSocial === i ? null : i); }}
                   className={`share-btn absolute top-4 right-4 w-9 h-9 rounded-full bg-white/20 backdrop-blur-sm text-white border border-white/30 flex items-center justify-center z-10 ${openSocial === i ? "active" : ""}`}
                   aria-label="Share"
                 >
@@ -159,31 +151,24 @@ export default function TeamSection() {
               {/* CONTENT */}
               <div className="p-5 flex items-center justify-between">
                 <div>
-                  <Link
-                    href="/team-details"
-                    className="font-bold text-[var(--color-foreground)] hover:text-[var(--color-primary)] transition text-base leading-tight block"
-                  >
+                  <span className="font-bold text-[var(--color-foreground)] group-hover:text-[var(--color-primary)] transition text-base leading-tight block">
                     {member.name}
-                  </Link>
+                  </span>
                   <p className="text-[var(--text-muted)] text-sm mt-0.5">{member.role}</p>
                 </div>
 
-                {/* Arrow link */}
-                <Link
-                  href="/team-details"
-                  className="flex-shrink-0 w-9 h-9 rounded-full border border-[var(--color-border)] flex items-center justify-center text-[var(--color-foreground)] hover:bg-[var(--color-primary)] hover:border-[var(--color-primary)] hover:text-white transition group/arrow"
-                  aria-label="View profile"
-                >
-                  <svg className="w-3.5 h-3.5 group-hover/arrow:translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                {/* Arrow */}
+                <span className="flex-shrink-0 w-9 h-9 rounded-full border border-[var(--color-border)] flex items-center justify-center text-[var(--color-foreground)] group-hover:bg-[var(--color-primary)] group-hover:border-[var(--color-primary)] group-hover:text-white transition">
+                  <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                   </svg>
-                </Link>
+                </span>
               </div>
 
               {/* PRIMARY COLOR BOTTOM ACCENT LINE */}
               <div className="absolute bottom-0 left-0 right-0 h-[3px] bg-[var(--color-primary)] scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-left" />
 
-            </div>
+            </Link>
           ))}
         </div>
 
