@@ -66,7 +66,7 @@ export default function SkillsSection() {
           <div className="relative">
 
             {/* Main Image */}
-            <Reveal direction="right">
+            <Reveal>
               <div className="relative">
 
                 <Image
