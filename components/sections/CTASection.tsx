@@ -39,7 +39,7 @@ export default function CTASection() {
 
 
           {/* IMAGE */}
-          <Reveal direction="left">
+          <Reveal >
             <div className="
               flex
               justify-center
@@ -68,7 +68,7 @@ export default function CTASection() {
 
 
           {/* CONTENT */}
-          <Reveal direction="right" delay={0.2}>
+          <Reveal delay={0.2}>
 
             <div className="
               text-center
