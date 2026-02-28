@@ -13,7 +13,7 @@ interface ShopSectionProps {
 export default function ShopSection({ products }: ShopSectionProps) {
   return (
     <section>
-      <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
         {products.length > 0 ? (
           products.map((product, index) => (
             <Reveal key={product.id} delay={index * 0.1}>
@@ -39,7 +39,8 @@ interface ProductCardProps {
 function ProductCard({ product }: ProductCardProps) {
   const { addItem, toggleCart } = useCart();
 
-  const handleAddToCart = () => {
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.preventDefault(); // prevent Link navigation when clicking button
     const cartItem = {
       id: parseInt(product.id),
       name: product.name,
@@ -53,7 +54,7 @@ function ProductCard({ product }: ProductCardProps) {
   return (
     <div className="card group overflow-hidden hover-lift h-full flex flex-col">
       {/* Image */}
-      <div className="relative h-60 overflow-hidden bg-[var(--surface)]">
+      <div className="relative h-48 sm:h-56 lg:h-60 overflow-hidden bg-[var(--surface)]">
         <Image
           src={product.image}
           alt={product.name}
@@ -63,11 +64,13 @@ function ProductCard({ product }: ProductCardProps) {
       </div>
 
       {/* Content */}
-      <div className="p-5 flex flex-col flex-1">
-        <h3 className="font-semibold mb-2 text-[var(--color-foreground)]">{product.name}</h3>
+      <div className="p-4 sm:p-5 flex flex-col flex-1">
+        <h3 className="font-semibold mb-2 text-[var(--color-foreground)] text-sm sm:text-base line-clamp-2">
+          {product.name}
+        </h3>
 
         <div className="mb-4">
-          <p className="text-[var(--color-primary)] font-bold text-lg">
+          <p className="text-[var(--color-primary)] font-bold text-base sm:text-lg">
             ${product.price}
           </p>
           <p className="text-xs text-[var(--text-light)]">{product.category}</p>
@@ -76,16 +79,17 @@ function ProductCard({ product }: ProductCardProps) {
         <button
           onClick={handleAddToCart}
           className="
-          mt-auto
-          w-full
-          bg-[var(--color-primary)]
-          text-[var(--color-primary-foreground)]
-          py-2.5
-          rounded-lg
-          hover:bg-[var(--primary-hover)]
-          transition-all
-          duration-300
-          font-medium
+            mt-auto
+            w-full
+            bg-[var(--color-primary)]
+            text-[var(--color-primary-foreground)]
+            py-2.5
+            rounded-lg
+            hover:bg-[var(--primary-hover)]
+            transition-all
+            duration-300
+            font-medium
+            text-sm
           "
         >
           Add to Cart

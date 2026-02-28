@@ -4,6 +4,7 @@ import "./globals.css";
 import ThemeProvider from "@/components/theme/theme-provider";
 import Cursor from "@/components/UI/cursor";
 import { CartProvider } from "@/components/layout/CartContext";
+import AppLoader from "@/components/UI/AppLoader";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,7 +34,9 @@ export default function RootLayout({
         <ThemeProvider>
           <CartProvider>
             <Cursor />
-            {children}
+            <AppLoader>
+              {children}
+            </AppLoader>
           </CartProvider>
         </ThemeProvider>
       </body>
