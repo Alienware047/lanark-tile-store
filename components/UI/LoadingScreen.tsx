@@ -203,7 +203,7 @@ export default function LoadingScreen({ onComplete, progress: externalProg }: Lo
   const [phase, setPhase]       = useState<"loading" | "burst" | "exit">("loading");
   const [angle, setAngle]       = useState(0);
   const lastTsRef               = useRef<number>(0);
-  const rafRef                  = useRef<number>();
+  const rafRef                  = useRef<number>(0);
 
   // Auto-simulate progress
   useEffect(() => {
