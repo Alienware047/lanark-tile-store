@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, type Variants, type Transition } from "framer-motion";
 import { Menu, X, ChevronDown, Phone, Search, ShoppingCart, MapPin, Mail, Clock } from "lucide-react";
 import ThemeToggle from "@/components/theme/theme-toggle";
 import CartModal from "@/components/layout/CartModal";
@@ -10,7 +10,7 @@ import { useCart } from "@/components/layout/CartContext";
 
 // ─── Animation variants ──────────────────────────────────────────────────────
 
-const sidebarVariants = {
+const sidebarVariants: Variants = {
   hidden: (dir: "left" | "right") => ({
     x: dir === "left" ? "-100%" : "100%",
     opacity: 0,
@@ -19,98 +19,111 @@ const sidebarVariants = {
     x: 0,
     opacity: 1,
     transition: {
-      type: "spring" as const,
+      type: "spring",
       stiffness: 340,
       damping: 38,
       mass: 0.9,
       when: "beforeChildren",
       staggerChildren: 0.045,
-    },
+    } as Transition,
   },
   exit: (dir: "left" | "right") => ({
     x: dir === "left" ? "-100%" : "100%",
     opacity: 0,
     transition: {
-      type: "spring" as const,
+      type: "spring",
       stiffness: 400,
       damping: 42,
-    },
+    } as Transition,
   }),
 };
 
-const backdropVariants = {
+const backdropVariants: Variants = {
   hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { duration: 0.25 } },
-  exit: { opacity: 0, transition: { duration: 0.22 } },
+  visible: { opacity: 1, transition: { duration: 0.25 } as Transition },
+  exit:    { opacity: 0, transition: { duration: 0.22 } as Transition },
 };
 
-const childItem = {
+const childItem: Variants = {
   hidden: { opacity: 0, x: -18, filter: "blur(4px)" },
   visible: {
     opacity: 1,
     x: 0,
     filter: "blur(0px)",
-    transition: { type: "spring" as const, stiffness: 380, damping: 32 },
+    transition: { type: "spring", stiffness: 380, damping: 32 } as Transition,
   },
 };
 
-const rightChildItem = {
+const rightChildItem: Variants = {
   hidden: { opacity: 0, x: 18, filter: "blur(4px)" },
   visible: {
     opacity: 1,
     x: 0,
     filter: "blur(0px)",
-    transition: { type: "spring" as const, stiffness: 380, damping: 32 },
+    transition: { type: "spring", stiffness: 380, damping: 32 } as Transition,
   },
 };
 
-const dropdownVariants = {
-  hidden: { opacity: 0, y: -8, scale: 0.97, transformOrigin: "top left" },
+const dropdownVariants: Variants = {
+  hidden: { opacity: 0, y: -8, scale: 0.97 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
     transition: {
-      type: "spring" as const,
+      type: "spring",
       stiffness: 420,
       damping: 32,
       when: "beforeChildren",
       staggerChildren: 0.04,
-    },
+    } as Transition,
   },
   exit: {
     opacity: 0,
     y: -6,
     scale: 0.97,
-    transition: { duration: 0.14, ease: "easeIn" },
+    transition: { duration: 0.14 } as Transition,
   },
 };
 
-const dropdownItem = {
+const dropdownItem: Variants = {
   hidden: { opacity: 0, x: -8 },
-  visible: { opacity: 1, x: 0, transition: { type: "spring" as const, stiffness: 400, damping: 30 } },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { type: "spring", stiffness: 400, damping: 30 } as Transition,
+  },
 };
 
-const megaVariants = {
+const megaVariants: Variants = {
   hidden: { opacity: 0, y: -10, scale: 0.98 },
   visible: {
     opacity: 1,
     y: 0,
     scale: 1,
     transition: {
-      type: "spring" as const,
+      type: "spring",
       stiffness: 380,
       damping: 30,
       when: "beforeChildren",
       staggerChildren: 0.06,
-    },
+    } as Transition,
   },
-  exit: { opacity: 0, y: -8, scale: 0.98, transition: { duration: 0.15 } },
+  exit: {
+    opacity: 0,
+    y: -8,
+    scale: 0.98,
+    transition: { duration: 0.15 } as Transition,
+  },
 };
 
-const megaCol = {
+const megaCol: Variants = {
   hidden: { opacity: 0, y: 14 },
-  visible: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 360, damping: 28 } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 360, damping: 28 } as Transition,
+  },
 };
 
 // ─── Accordion item for mobile ───────────────────────────────────────────────
@@ -124,7 +137,10 @@ function MobileAccordion({ title, links }: { title: string; links: { name: strin
         className="w-full flex items-center justify-between px-4 py-3 rounded-lg text-[var(--color-foreground)] hover:text-[var(--color-primary)] hover:bg-[var(--primary-light)] transition font-medium text-sm"
       >
         <span>{title}</span>
-        <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ type: "spring", stiffness: 400, damping: 28 }}>
+        <motion.span
+          animate={{ rotate: open ? 180 : 0 }}
+          transition={{ type: "spring", stiffness: 400, damping: 28 }}
+        >
           <ChevronDown className="w-4 h-4 opacity-60" />
         </motion.span>
       </button>
@@ -132,8 +148,19 @@ function MobileAccordion({ title, links }: { title: string; links: { name: strin
         {open && (
           <motion.div
             initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1, transition: { height: { type: "spring", stiffness: 400, damping: 36 }, opacity: { duration: 0.2 } } }}
-            exit={{ height: 0, opacity: 0, transition: { duration: 0.22, ease: "easeInOut" } }}
+            animate={{
+              height: "auto",
+              opacity: 1,
+              transition: {
+                height: { type: "spring", stiffness: 400, damping: 36 },
+                opacity: { duration: 0.2 },
+              } as Transition,
+            }}
+            exit={{
+              height: 0,
+              opacity: 0,
+              transition: { duration: 0.22 } as Transition,
+            }}
             style={{ overflow: "hidden" }}
           >
             <div className="ml-4 mt-1 mb-1 flex flex-col border-l-2 border-[var(--color-primary)] pl-3 space-y-0.5">
@@ -141,9 +168,21 @@ function MobileAccordion({ title, links }: { title: string; links: { name: strin
                 <motion.div
                   key={i}
                   initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0, transition: { delay: i * 0.04, type: "spring", stiffness: 380, damping: 28 } }}
+                  animate={{
+                    opacity: 1,
+                    x: 0,
+                    transition: {
+                      delay: i * 0.04,
+                      type: "spring",
+                      stiffness: 380,
+                      damping: 28,
+                    } as Transition,
+                  }}
                 >
-                  <Link href={link.href} className="block px-3 py-2 rounded-lg text-sm text-[var(--text-muted)] hover:text-[var(--color-primary)] hover:bg-[var(--primary-light)] transition">
+                  <Link
+                    href={link.href}
+                    className="block px-3 py-2 rounded-lg text-sm text-[var(--text-muted)] hover:text-[var(--color-primary)] hover:bg-[var(--primary-light)] transition"
+                  >
                     {link.name}
                   </Link>
                 </motion.div>
@@ -168,7 +207,10 @@ function Dropdown({ title, links }: { title: string; links: { name: string; href
     >
       <button className="flex items-center gap-1 px-4 py-2 rounded-lg text-[var(--color-foreground)] hover:text-[var(--color-primary)] hover:bg-[var(--primary-light)] transition font-medium text-sm">
         {title}
-        <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ type: "spring", stiffness: 400, damping: 26 }}>
+        <motion.span
+          animate={{ rotate: open ? 180 : 0 }}
+          transition={{ type: "spring", stiffness: 400, damping: 26 }}
+        >
           <ChevronDown className="w-3 h-3 opacity-60" />
         </motion.span>
       </button>
@@ -222,7 +264,10 @@ function HomeDropdown() {
     <div className="relative" onMouseEnter={() => setOpen(true)} onMouseLeave={() => setOpen(false)}>
       <button className="flex items-center gap-1 px-4 py-2 rounded-lg text-[var(--color-foreground)] hover:text-[var(--color-primary)] hover:bg-[var(--primary-light)] transition font-medium text-sm">
         Home
-        <motion.span animate={{ rotate: open ? 180 : 0 }} transition={{ type: "spring", stiffness: 400, damping: 26 }}>
+        <motion.span
+          animate={{ rotate: open ? 180 : 0 }}
+          transition={{ type: "spring", stiffness: 400, damping: 26 }}
+        >
           <ChevronDown className="w-3 h-3 opacity-60" />
         </motion.span>
       </button>
@@ -257,7 +302,6 @@ const SOCIALS = [
 // ─── Main header ─────────────────────────────────────────────────────────────
 
 export default function PremiumHeader() {
-  const [mobileOpen, setMobileOpen]       = useState(false);
   const [offcanvasOpen, setOffcanvasOpen] = useState(false);
   const [infoOpen, setInfoOpen]           = useState(false);
   const { cart, open: cartOpen, toggleCart } = useCart();
@@ -299,14 +343,18 @@ export default function PremiumHeader() {
             <Search className="w-5 h-5 text-[var(--color-foreground)] hover:text-[var(--color-primary)]" />
           </button>
 
-          <button onClick={toggleCart} className="hidden lg:flex p-2 rounded-lg hover:bg-[var(--primary-light)] transition relative" title="Shopping Cart">
+          <button
+            onClick={toggleCart}
+            className="hidden lg:flex p-2 rounded-lg hover:bg-[var(--primary-light)] transition relative"
+            title="Shopping Cart"
+          >
             <ShoppingCart className="w-5 h-5 text-[var(--color-foreground)] hover:text-[var(--color-primary)]" />
             <AnimatePresence>
               {cart.length > 0 && (
                 <motion.span
                   key="badge"
                   initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1, transition: { type: "spring", stiffness: 500, damping: 22 } }}
+                  animate={{ scale: 1, opacity: 1, transition: { type: "spring", stiffness: 500, damping: 22 } as Transition }}
                   exit={{ scale: 0, opacity: 0 }}
                   className="absolute top-0 right-0 w-5 h-5 bg-[var(--color-primary)] text-white text-xs rounded-full flex items-center justify-center font-semibold"
                 >
@@ -333,11 +381,23 @@ export default function PremiumHeader() {
           >
             <AnimatePresence mode="wait" initial={false}>
               {offcanvasOpen ? (
-                <motion.span key="close" initial={{ rotate: -90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: 90, opacity: 0 }} transition={{ duration: 0.18 }}>
+                <motion.span
+                  key="close"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.18 }}
+                >
                   <X size={24} />
                 </motion.span>
               ) : (
-                <motion.span key="menu" initial={{ rotate: 90, opacity: 0 }} animate={{ rotate: 0, opacity: 1 }} exit={{ rotate: -90, opacity: 0 }} transition={{ duration: 0.18 }}>
+                <motion.span
+                  key="menu"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, opacity: 0 }}
+                  transition={{ duration: 0.18 }}
+                >
                   <Menu size={24} />
                 </motion.span>
               )}
@@ -369,7 +429,6 @@ export default function PremiumHeader() {
               className="fixed left-0 top-0 h-full w-80 bg-[var(--color-card)] border-r border-[var(--color-border)] shadow-lg z-50 overflow-y-auto"
             >
               <div className="p-6">
-                {/* Header row */}
                 <motion.div variants={childItem} className="flex items-center justify-between mb-6">
                   <Link href="/" className="flex items-center">
                     <img src="/assets/images/logo/logo.svg" alt="Logo" className="h-10 w-auto" />
@@ -379,7 +438,6 @@ export default function PremiumHeader() {
                   </button>
                 </motion.div>
 
-                {/* Nav */}
                 <motion.nav className="flex flex-col space-y-1 mb-6">
                   <MobileAccordion
                     title="Home"
@@ -420,7 +478,6 @@ export default function PremiumHeader() {
                   </motion.div>
                 </motion.nav>
 
-                {/* Contact info */}
                 <motion.div variants={childItem} className="mb-6">
                   <h4 className="font-bold text-[var(--color-foreground)] mb-4">Contact Info</h4>
                   <ul className="space-y-3">
@@ -492,7 +549,7 @@ export default function PremiumHeader() {
                   Contact Info
                 </motion.h3>
                 <motion.p variants={rightChildItem} className="text-sm text-[var(--text-muted)] mb-8">
-                  Get in touch with us for any inquiries or assistance. We're here to help!
+                  Get in touch with us for any inquiries or assistance. We&apos;re here to help!
                 </motion.p>
 
                 <motion.div variants={rightChildItem} className="space-y-6 mb-8">
