@@ -54,16 +54,16 @@ export default function ReliableFloorServices() {
               <Image
                 src="/assets/images/shape/wcuThumbShape1_2.png"
                 alt=""
-                width={20}
-                height={10}
+                width={7}
+                height={1}
                 className="absolute top-10 right-0 animate-bounce"
               />
 
               <Image
                 src="/assets/images/shape/wcuThumbShape1_3.png"
                 alt=""
-                width={20}
-                height={10}
+                width={7}
+                height={1}
                 className="absolute top-10 right-10 animate-bounce"
               />
 
@@ -113,6 +113,7 @@ export default function ReliableFloorServices() {
                   alt=""
                   width={50}
                   height={50}
+                  unoptimized
                 />
 
                 <div>
@@ -140,6 +141,7 @@ export default function ReliableFloorServices() {
                   alt=""
                   width={50}
                   height={50}
+                  unoptimized
                 />
 
                 <div>

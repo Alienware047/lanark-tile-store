@@ -69,7 +69,7 @@ export default function ExpertiseSection() {
             </div>
 
             <motion.p
-              className="mb-8 text-gray-600"
+              className="mb-8 "
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
@@ -90,7 +90,7 @@ export default function ExpertiseSection() {
                   className="w-full"
                 >
                   <div className="flex justify-between mb-2">
-                    <span className="font-semibold text-gray-800">{skill.title}</span>
+                    <span className="font-semibold ">{skill.title}</span>
                     <span className="font-bold text-[var(--primary)]">{skill.percentage}%</span>
                   </div>
                   <div className="h-3 w-full bg-gray-300 rounded-full overflow-hidden">

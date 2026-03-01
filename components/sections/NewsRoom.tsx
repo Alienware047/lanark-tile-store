@@ -52,9 +52,9 @@ export default function NewsRoom() {
             transition={{ duration: 0.6 }}
             viewport={{ once: true }}
           >
-            <Image src="/images/shape/titleShape1_1.png" width={24} height={24} alt="icon" />
+            <img src="/images/shape/titleShape1_1.png" width={24} height={24} alt="icon" />
             NEWS ROOM
-            <Image src="/images/shape/titleShape1_2.png" width={24} height={24} alt="icon" />
+            <img src="/images/shape/titleShape1_2.png" width={24} height={24} alt="icon" />
           </motion.div>
 
           <motion.h2
