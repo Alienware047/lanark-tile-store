@@ -128,7 +128,7 @@ const megaCol: Variants = {
 
 // ─── Accordion item for mobile ───────────────────────────────────────────────
 
-function MobileAccordion({ title, links }: { title: string; links: { name: string; href: string }[] }) {
+function MobileAccordion({ title, links }: { title: string; links: { name: string; href: string; onClick?: () => void }[] }) {
   const [open, setOpen] = useState(false);
   return (
     <motion.div variants={childItem}>
@@ -181,6 +181,7 @@ function MobileAccordion({ title, links }: { title: string; links: { name: strin
                 >
                   <Link
                     href={link.href}
+                    onClick={link.onClick}
                     className="block px-3 py-2 rounded-lg text-sm text-[var(--text-muted)] hover:text-[var(--color-primary)] hover:bg-[var(--primary-light)] transition"
                   >
                     {link.name}
@@ -345,7 +346,7 @@ export default function PremiumHeader() {
 
           <button
             onClick={toggleCart}
-            className="hidden lg:flex p-2 rounded-lg hover:bg-[var(--primary-light)] transition relative"
+            className="flex p-2 rounded-lg hover:bg-[var(--primary-light)] transition relative"
             title="Shopping Cart"
           >
             <ShoppingCart className="w-5 h-5 text-[var(--color-foreground)] hover:text-[var(--color-primary)]" />
@@ -442,15 +443,15 @@ export default function PremiumHeader() {
                   <MobileAccordion
                     title="Home"
                     links={[
-                      { name: "Home 01 – Multi Page", href: "/" },
-                      { name: "Home 01 – One Page", href: "/index-one-page" },
-                      { name: "Home 01 – Dark", href: "/index-dark" },
-                      { name: "Home 02 – Multi Page", href: "/index2" },
-                      { name: "Home 02 – One Page", href: "/index-two-page" },
-                      { name: "Home 02 – Dark", href: "/index-2-dark" },
-                      { name: "Home 03 – Multi Page", href: "/index3" },
-                      { name: "Home 03 – One Page", href: "/index-three-page" },
-                      { name: "Home 03 – Dark", href: "/index-3-dark" },
+                      { name: "Home 01 – Multi Page", href: "/", onClick: () => setOffcanvasOpen(false) },
+                      { name: "Home 01 – One Page", href: "/index-one-page", onClick: () => setOffcanvasOpen(false) },
+                      { name: "Home 01 – Dark", href: "/index-dark", onClick: () => setOffcanvasOpen(false) },
+                      { name: "Home 02 – Multi Page", href: "/index2", onClick: () => setOffcanvasOpen(false) },
+                      { name: "Home 02 – One Page", href: "/index-two-page", onClick: () => setOffcanvasOpen(false) },
+                      { name: "Home 02 – Dark", href: "/index-2-dark", onClick: () => setOffcanvasOpen(false) },
+                      { name: "Home 03 – Multi Page", href: "/index3", onClick: () => setOffcanvasOpen(false) },
+                      { name: "Home 03 – One Page", href: "/index-three-page", onClick: () => setOffcanvasOpen(false) },
+                      { name: "Home 03 – Dark", href: "/index-3-dark", onClick: () => setOffcanvasOpen(false) },
                     ]}
                   />
                   {[
@@ -458,21 +459,28 @@ export default function PremiumHeader() {
                     { label: "Services", href: "/services" },
                   ].map(({ label, href }) => (
                     <motion.div key={label} variants={childItem}>
-                      <Link href={href} className="block px-4 py-3 rounded-lg text-[var(--color-foreground)] hover:text-[var(--color-primary)] hover:bg-[var(--primary-light)] transition font-medium text-sm">
+                      <Link href={href} onClick={() => setOffcanvasOpen(false)} className="block px-4 py-3 rounded-lg text-[var(--color-foreground)] hover:text-[var(--color-primary)] hover:bg-[var(--primary-light)] transition font-medium text-sm">
                         {label}
                       </Link>
                     </motion.div>
                   ))}
                   <MobileAccordion
                     title="Pages"
-                    links={[{ name: "Project", href: "/project" }, { name: "Team", href: "/team" }, { name: "Pricing", href: "/pricing" }, { name: "Gallery", href: "/gallery" }, { name: "FAQ", href: "/faq" }, { name: "Login", href: "/login" }]}
+                    links={[
+                      { name: "Project", href: "/project", onClick: () => setOffcanvasOpen(false) },
+                      { name: "Team", href: "/team", onClick: () => setOffcanvasOpen(false) },
+                      { name: "Pricing", href: "/pricing", onClick: () => setOffcanvasOpen(false) },
+                      { name: "Gallery", href: "/gallery", onClick: () => setOffcanvasOpen(false) },
+                      { name: "FAQ", href: "/faq", onClick: () => setOffcanvasOpen(false) },
+                      { name: "Login", href: "/login", onClick: () => setOffcanvasOpen(false) },
+                    ]}
                   />
                   <MobileAccordion
                     title="Shop"
-                    links={[{ name: "Shop", href: "/shop" }, { name: "Checkout", href: "/checkout" }]}
+                    links={[{ name: "Shop", href: "/shop", onClick: () => setOffcanvasOpen(false) }, { name: "Checkout", href: "/checkout", onClick: () => setOffcanvasOpen(false) }]}
                   />
                   <motion.div variants={childItem}>
-                    <Link href="/contact" className="block px-4 py-3 rounded-lg text-[var(--color-foreground)] hover:text-[var(--color-primary)] hover:bg-[var(--primary-light)] transition font-medium text-sm">
+                    <Link href="/contact" onClick={() => setOffcanvasOpen(false)} className="block px-4 py-3 rounded-lg text-[var(--color-foreground)] hover:text-[var(--color-primary)] hover:bg-[var(--primary-light)] transition font-medium text-sm">
                       Contact
                     </Link>
                   </motion.div>

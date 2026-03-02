@@ -22,8 +22,8 @@ export default function CartModal() {
       />
 
       {/* CART MODAL PANEL */}
-      <div className="fixed right-0 top-0 h-full w-96 bg-[var(--color-card)] border-l border-[var(--color-border)] shadow-lg z-50 overflow-y-auto">
-        <div className="p-6 flex flex-col h-full">
+      <div className="fixed right-0 top-0 h-full w-full sm:w-96 bg-[var(--color-card)] border-l border-[var(--color-border)] shadow-lg z-50 overflow-y-auto">
+        <div className="p-4 sm:p-6 flex flex-col h-full">
 
           {/* HEADER */}
           <div className="flex items-center justify-between mb-6">

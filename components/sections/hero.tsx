@@ -30,10 +30,10 @@ export default function Hero() {
 
       {/* CONTAINER */}
       <div className="max-w-7xl mx-auto px-6 py-24">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
 
           {/* LEFT CONTENT */}
-          <div className="max-w-xl space-y-6">
+          <div className="max-w-xl space-y-6  order-2 lg:order-1">
 
             {/* Badge */}
             <Reveal type="fade" delay={100}>
@@ -71,7 +71,7 @@ export default function Hero() {
           </div>
 
           {/* RIGHT CONTENT */}
-          <div className="relative flex justify-center">
+          <div className="relative flex justify-center order-1 lg:order-2">
 
             {/* Floating Tile Top */}
             <Reveal type="scale" delay={300}>
