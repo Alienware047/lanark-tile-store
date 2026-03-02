@@ -1,11 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import Reveal from "@/components/UI/Reveal"; // make sure path is correct
+import Reveal from "@/components/UI/Reveal";
 
-// -------------------------
-// TypeScript Interfaces
-// -------------------------
 interface FancyBox {
   icon: string;
   title: string;
@@ -18,14 +15,11 @@ interface AboutSectionProps {
   description?: string;
   yearsOnMarket?: number;
   progressTitle?: string;
-  progressPercent?: number; // 0-100
+  progressPercent?: number;
   fancyBoxes?: FancyBox[];
   videoUrl?: string;
 }
 
-// -------------------------
-// AboutSection Component
-// -------------------------
 export default function AboutSection({
   badgeText = "ABOUT COMPANY",
   subtitleImg = "/assets/images/shape/titleShape1_1.png",
@@ -43,18 +37,23 @@ export default function AboutSection({
   return (
     <section className="py-24 bg-[var(--background)]">
       <div className="container mx-auto px-6">
-        {/* Flip order for large screens */}
         <div className="grid lg:grid-cols-2 gap-16 items-center">
 
           {/* LEFT / Image */}
-          <div className="relative order-first lg:order-first">
+          <div className="order-first lg:order-first">
             <Reveal type="fade" delay={100}>
+              {/*
+                FIX 1: `fill` images need a parent with position:relative + explicit dimensions.
+                The parent div provides both — overflow-hidden clips the rounded corners cleanly.
+              */}
               <div className="relative w-full h-[400px] md:h-[500px] rounded-xl overflow-hidden shadow-lg">
                 <Image
                   src="/assets/images/about/aboutThumb1_1.jpg"
-                  alt="About"
+                  alt="About Lanark Tiles"
                   fill
-                  className="object-cover rounded-xl"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                  className="object-cover"
+                  priority
                 />
               </div>
             </Reveal>
@@ -62,13 +61,33 @@ export default function AboutSection({
 
           {/* RIGHT / Content */}
           <div className="max-w-xl order-last lg:order-last">
+
             {/* Badge */}
             <Reveal type="fade" delay={100}>
-              <div className="inline-flex items-center gap-2 border border-default px-4 py-1.5 rounded-full text-sm text-[var(--text-muted)] mb-6">
-                <span className="w-2 h-2 bg-[var(--color-primary)] rounded-full"></span>
+              <div className="inline-flex items-center gap-2 border border-default px-4 py-1.5 rounded-full text-sm text-[var(--text-muted)] mb-4">
+                <span className="w-2 h-2 bg-[var(--color-primary)] rounded-full" />
                 {badgeText}
               </div>
             </Reveal>
+
+            {/*
+              FIX 2: subtitleImg PNG was declared as a prop but never rendered.
+              Wrapped in a positioned container so `fill` works correctly.
+            */}
+            {subtitleImg && (
+              <Reveal type="fade" delay={150}>
+                <div className="relative w-36 h-6 mb-4">
+                  <Image
+                    src={subtitleImg}
+                    alt="section title shape"
+                    fill
+                    sizes="144px"
+                    className="object-contain object-left"
+                    unoptimized
+                  />
+                </div>
+              </Reveal>
+            )}
 
             {/* Heading */}
             <Reveal type="fade" delay={200}>
@@ -87,11 +106,14 @@ export default function AboutSection({
             {/* Stats */}
             <div className="flex flex-col md:flex-row md:items-center md:gap-6 mb-8">
               <Reveal type="fade" delay={400}>
-                <div className="text-center md:text-left mb-4 md:mb-0">
-                  <span className="text-4xl font-bold text-[var(--color-primary)]">{yearsOnMarket}+</span>
+                <div className="text-center md:text-left mb-4 md:mb-0 shrink-0">
+                  <span className="text-4xl font-bold text-[var(--color-primary)]">
+                    {yearsOnMarket}+
+                  </span>
                   <p className="text-[var(--text-muted)]">Years On Market</p>
                 </div>
               </Reveal>
+
               <Reveal type="fade" delay={500}>
                 <div className="w-full">
                   <div className="flex justify-between mb-1">
@@ -102,7 +124,7 @@ export default function AboutSection({
                     <div
                       className="h-3 bg-[var(--color-primary)] rounded-full transition-all duration-1000"
                       style={{ width: `${progressPercent}%` }}
-                    ></div>
+                    />
                   </div>
                 </div>
               </Reveal>
@@ -114,15 +136,30 @@ export default function AboutSection({
                 {fancyBoxes.map((box, i) => (
                   <Reveal key={i} type="fade" delay={300 + i * 200}>
                     <div className="flex items-center gap-3 p-4 border border-default rounded-lg hover:shadow-lg transition">
-                      <Image src={box.icon} width={32} height={32} alt="icon" />
-                      <h4 className="font-semibold">{box.title}</h4>
+                      {/*
+                        FIX 3: SVG icons need:
+                          a) A positioned wrapper div for `fill` to work
+                          b) `unoptimized` prop — Next.js Image optimisation
+                             strips SVG metadata and breaks rendering
+                      */}
+                      <div className="relative w-8 h-8 shrink-0">
+                        <Image
+                          src={box.icon}
+                          alt=""
+                          fill
+                          sizes="32px"
+                          className="object-contain"
+                          unoptimized
+                        />
+                      </div>
+                      <h4 className="font-semibold text-sm leading-snug">{box.title}</h4>
                     </div>
                   </Reveal>
                 ))}
               </div>
             )}
 
-            {/* Video / CTA */}
+            {/* Video CTA */}
             {videoUrl && (
               <Reveal type="fade" delay={600}>
                 <div className="mt-8">
@@ -137,8 +174,8 @@ export default function AboutSection({
                 </div>
               </Reveal>
             )}
-          </div>
 
+          </div>
         </div>
       </div>
     </section>

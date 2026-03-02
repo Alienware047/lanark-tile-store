@@ -15,220 +15,188 @@ export default function ServicesSection({
   services = defaultServices,
 }: ServicesSectionProps) {
 
-  /* ---------------------------
-     Responsive Card Count
-  --------------------------- */
-  const getVisibleCount = () => {
-    if (typeof window === "undefined") return 3;
-    if (window.innerWidth < 768) return 1;
-    if (window.innerWidth < 1024) return 2;
-    return 3;
-  };
+  const GAP = 24;
+  const total = services.length;
+  const containerRef = useRef<HTMLDivElement>(null);
+  const controls = useAnimation();
+  const isAnimating = useRef(false);
+  const autoplayRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const [visibleCount, setVisibleCount] = useState(getVisibleCount());
+  const [index, setIndex] = useState(0);
+  const [cardWidth, setCardWidth] = useState(0);
 
-  useEffect(() => {
-    const handleResize = () => setVisibleCount(getVisibleCount());
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
+  /* Compute card width from container */
+  const compute = useCallback(() => {
+    if (!containerRef.current) return;
+    const vw = window.innerWidth;
+    const count = vw < 640 ? 1 : vw < 1024 ? 2 : 3;
+    const cw = (containerRef.current.offsetWidth - GAP * (count - 1)) / count;
+    setCardWidth(cw);
   }, []);
 
-  /* ---------------------------
-     Infinite Loop Setup
-  --------------------------- */
-  const duplicated = [...services, ...services, ...services];
-  const controls = useAnimation();
-  const containerRef = useRef<HTMLDivElement>(null);
-  const [index, setIndex] = useState(services.length);
-  const [isTransitioning, setIsTransitioning] = useState(true);
-  const gap = 24;
+  useEffect(() => {
+    compute();
+    window.addEventListener("resize", compute);
+    return () => window.removeEventListener("resize", compute);
+  }, [compute]);
 
-  /* ---------------------------
-     Card Width Calculation
-  --------------------------- */
-  const getCardWidth = useCallback(() => {
-    if (!containerRef.current) return 0;
-    const width = containerRef.current.offsetWidth;
-    return width / visibleCount - gap + gap / visibleCount;
-  }, [visibleCount]);
+  /* Looped track: [last clone] [...all] [first clone] */
+  const trackItems = [services[total - 1], ...services, services[0]];
+  const trackIndex = index + 1; // offset for clone at start
 
-  /* ---------------------------
-     Slide Functions
-  --------------------------- */
-  const slideTo = useCallback(
-    async (i: number, smooth: boolean = true) => {
-      setIndex(i);
-      if (smooth) {
-        setIsTransitioning(true);
-        await controls.start({
-          x: -(getCardWidth() + gap) * i,
-          transition: { type: "spring", stiffness: 120, damping: 20 },
-        });
-      } else {
-        controls.set({ x: -(getCardWidth() + gap) * i });
-      }
-      setIsTransitioning(false);
+  /* Animate track */
+  const animateTrack = useCallback(
+    (ti: number, instant = false) => {
+      if (!cardWidth) return;
+      const x = -(cardWidth + GAP) * ti;
+      if (instant) controls.set({ x });
+      else controls.start({ x, transition: { type: "spring", stiffness: 260, damping: 30 } });
     },
-    [controls, getCardWidth]
+    [controls, cardWidth]
   );
 
-  const next = () => slideTo(index + 1);
-  const prev = () => slideTo(index - 1);
+  useEffect(() => { animateTrack(trackIndex); }, [index, animateTrack, trackIndex]);
+  // Re-snap on resize without animation
+  useEffect(() => { if (cardWidth) animateTrack(trackIndex, true); }, [cardWidth]); // eslint-disable-line
 
-  /* ---------------------------
-     True Loop Reset
-  --------------------------- */
+  /* Navigation */
+  const stopAutoplay = () => { if (autoplayRef.current) clearInterval(autoplayRef.current); };
+
+  const goTo = useCallback(
+    async (newIdx: number, isAuto = false) => {
+      if (!isAuto) stopAutoplay();
+      if (isAnimating.current) return;
+      isAnimating.current = true;
+
+      if (newIdx >= total) {
+        await controls.start({ x: -(cardWidth + GAP) * (total + 1), transition: { type: "spring", stiffness: 260, damping: 30 } });
+        controls.set({ x: -(cardWidth + GAP) * 1 });
+        setIndex(0);
+      } else if (newIdx < 0) {
+        await controls.start({ x: 0, transition: { type: "spring", stiffness: 260, damping: 30 } });
+        controls.set({ x: -(cardWidth + GAP) * total });
+        setIndex(total - 1);
+      } else {
+        setIndex(newIdx);
+      }
+      setTimeout(() => { isAnimating.current = false; }, 500);
+    },
+    [controls, cardWidth, total]
+  );
+
+  const next = useCallback(() => goTo(index + 1), [goTo, index]);
+  const prev = useCallback(() => goTo(index - 1), [goTo, index]);
+
+  /* Autoplay */
   useEffect(() => {
-    if (index >= services.length * 2) {
-      // Jump back to the first duplicate set seamlessly
-      slideTo(services.length, false);
-    }
-    if (index < 0) {
-      // Jump to end seamlessly when going backwards
-      slideTo(services.length, false);
-    }
-  }, [index, services.length, slideTo]);
+    autoplayRef.current = setInterval(() => goTo(index + 1, true), 4000);
+    return () => stopAutoplay();
+  }, [index, goTo]); // eslint-disable-line
 
-  /* ---------------------------
-     Autoplay
-  --------------------------- */
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setIndex((prevIndex) => prevIndex + 1);
-    }, 4000);
-    return () => clearInterval(timer);
-  }, []);
-
-  /* ---------------------------
-     Index Change Handler
-  --------------------------- */
-  useEffect(() => {
-    slideTo(index, isTransitioning);
-  }, [index, isTransitioning, slideTo]);
-
-  /* ---------------------------
-     Swipe / Drag Handling
-  --------------------------- */
-  const dragEnd = (_: any, info: any) => {
+  /* Drag */
+  const onDragEnd = (_: unknown, info: { offset: { x: number } }) => {
     if (info.offset.x < -50) next();
-    if (info.offset.x > 50) prev();
+    else if (info.offset.x > 50) prev();
+    else animateTrack(trackIndex);
   };
 
-  /* ---------------------------
-     UI
-  --------------------------- */
   return (
     <section
       className="relative w-full py-24 bg-cover bg-center overflow-hidden"
       style={{ backgroundImage: `url(${backgroundImage})` }}
     >
-      {/* Overlay */}
-      <div className="absolute inset-0 bg-black/60" />
+      <div className="absolute inset-0 bg-black/65" />
 
       <div className="container mx-auto px-6 relative z-10">
+
         {/* Header */}
         <Reveal>
-          <div className="mb-14">
-            <div className="flex items-center gap-3 text-white">
-              <Image src={subtitleImg} width={24} height={24} alt="" />
-              {subtitleText}
+          <div className="mb-16">
+            <div className="flex items-center gap-3 mb-3">
+              {/* FIX 1: PNG shape — needs fill wrapper + unoptimized */}
+              <div className="relative w-6 h-6 shrink-0">
+                <Image src={subtitleImg} alt="" fill sizes="24px" className="object-contain" unoptimized />
+              </div>
+              <span className="text-sm font-semibold tracking-widest uppercase text-white/80">
+                {subtitleText}
+              </span>
             </div>
-            <h2 className="text-white text-4xl font-bold mt-3">
+            <h2 className="text-white text-3xl sm:text-4xl font-bold leading-tight max-w-xl">
               {heading}
             </h2>
           </div>
         </Reveal>
 
         {/* Slider */}
-        <div ref={containerRef} className="relative overflow-hidden">
-          {/* Navigation Buttons */}
-          <button
-            onClick={prev}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-30 w-12 h-12 bg-[var(--body)] shadow-lg rounded-full hover:bg-[var(--theme-primary)] hover:text-white transition"
-          >
+        <div className="relative">
+
+          {/* Prev */}
+          <button onClick={prev} aria-label="Previous"
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-30 w-11 h-11 flex items-center justify-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-white hover:bg-[var(--color-primary)] hover:border-[var(--color-primary)] transition-all duration-200 text-lg">
             ←
           </button>
 
-          <button
-            onClick={next}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-30 w-12 h-12 bg-[var(--body)] shadow-lg rounded-full hover:bg-[var(--theme-primary)] hover:text-white transition"
-          >
+          {/* Next */}
+          <button onClick={next} aria-label="Next"
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-30 w-11 h-11 flex items-center justify-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-white hover:bg-[var(--color-primary)] hover:border-[var(--color-primary)] transition-all duration-200 text-lg">
             →
           </button>
 
-          {/* Track */}
-          <motion.div
-            drag="x"
-            onDragEnd={dragEnd}
-            dragElastic={0.2}
-            dragConstraints={{ left: -10000, right: 10000 }}
-            animate={controls}
-            className="flex gap-6 cursor-grab active:cursor-grabbing py-12 will-change-transform"
-          >
-            {duplicated.map((service, i) => (
-              <div
-                key={i}
-                style={{ width: getCardWidth() }}
-                className="
-                  relative
-                  pt-28
-                  pb-8
-                  px-6
-                  flex-shrink-0
-                  rounded-3xl
-                  bg-[var(--body)]
-                  shadow-[0_15px_50px_rgba(0,0,0,0.25)]
-                  hover:-translate-y-3
-                  transition-all duration-500
-                  flex flex-col items-center text-center
-                  min-h-[460px]
-                  overflow-visible
-                "
-              >
-                {/* Icon */}
-                <div className="absolute -top-12">
-                  <div className="
-                    w-24 h-24
-                    bg-gradient-to-br from-[var(--theme-primary)] to-[var(--theme-secondary)]
-                    rounded-2xl
-                    flex items-center justify-center
-                    shadow-xl
-                  ">
-                    <Image src={service.icon} width={40} height={40} alt={service.title} />
-                  </div>
-                </div>
-
-                {/* Title */}
-                <h3 className="mt-6 font-semibold text-xl text-white">
-                  {service.title}
-                </h3>
-
-                {/* Image */}
-                <div className="relative h-44 w-full mt-6 rounded-xl overflow-hidden">
-                  <Image src={service.thumb} fill alt={service.title} className="object-cover" />
-                </div>
-
-                {/* Rounded CTA Button */}
-                <a
-                  href={service.link}
-                  className="
-                    mt-auto
-                    w-14 h-14
-                    flex items-center justify-center
-                    bg-[var(--theme-primary)]
-                    text-white text-xl
-                    rounded-xl
-                    hover:bg-[var(--theme-secondary)]
-                    transition
-                  "
+          {/* Viewport — mx-14 keeps cards clear of nav buttons */}
+          <div ref={containerRef} className="overflow-hidden mx-14">
+            <motion.div
+              drag="x" onDragEnd={onDragEnd}
+              dragElastic={0.08} dragConstraints={{ left: -99999, right: 99999 }}
+              animate={controls}
+              style={{ gap: GAP }}
+              className="flex py-14 cursor-grab active:cursor-grabbing will-change-transform"
+            >
+              {trackItems.map((service, i) => (
+                <div key={i}
+                  style={{ width: cardWidth > 0 ? cardWidth : undefined, minWidth: 220, flexShrink: 0 }}
+                  className="relative pt-16 pb-8 px-6 rounded-2xlbg-black shadow-[0_8px_40px_rgba(0,0,0,0.3)] hover:-translate-y-2 transition-transform duration-300 flex flex-col items-center text-center min-h-[400px]"
                 >
-                  →
-                </a>
-              </div>
-            ))}
-          </motion.div>
+                  {/* Icon — FIX 2: SVG needs fill wrapper + unoptimized */}
+                  <div className="absolute -top-10 left-1/2 -translate-x-1/2">
+                    <div className="w-20 h-20 bg-[var(--color-primary)] rounded-2xl flex items-center justify-center shadow-lg">
+                      <div className="relative w-9 h-9">
+                        <Image src={service.icon} alt={service.title} fill sizes="36px" className="object-contain" unoptimized />
+                      </div>
+                    </div>
+                  </div>
+
+                  <h3 className="text-white mt-4 font-semibold text-lg leading-snug ">
+                    {service.title}
+                  </h3>
+
+                  {/* Thumb — FIX 3: fill needs positioned parent with explicit height */}
+                  <div className="relative w-full h-44 mt-5 rounded-xl overflow-hidden">
+                    <Image
+                      src={service.thumb} alt={service.title} fill
+                      sizes={cardWidth ? `${Math.round(cardWidth)}px` : "300px"}
+                      className="object-cover"
+                    />
+                  </div>
+
+                  <a href={service.link} aria-label={`Learn more about ${service.title}`}
+                    className="mt-auto w-12 h-12 flex items-center justify-center bg-[var(--color-primary)] text-white text-lg rounded-full hover:opacity-80 transition-opacity">
+                    →
+                  </a>
+                </div>
+              ))}
+            </motion.div>
+          </div>
         </div>
+
+        {/* Dots */}
+        <div className="flex justify-center gap-2 mt-8">
+          {Array.from({ length: total }).map((_, i) => (
+            <button key={i} onClick={() => goTo(i)} aria-label={`Go to slide ${i + 1}`}
+              className={`rounded-full transition-all duration-300 ${i === index ? "w-6 h-2.5 bg-[var(--color-primary)]" : "w-2.5 h-2.5 bg-white/30 hover:bg-white/60"}`}
+            />
+          ))}
+        </div>
+
       </div>
     </section>
   );
