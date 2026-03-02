@@ -93,7 +93,7 @@ function BrokenTileStrip() {
   return (
     <div style={{ display: "flex", gap: 3, opacity: 0.18, marginBottom: 4 }}>
       {styles.map((s, i) => (
-        <DecorTile key={i} size={38} seed={i * 17 + 3} tileStyle={s} />
+        <DecorTile key={i} size={38} seed={i * 17 + 3} style={s} />
       ))}
     </div>
   );
