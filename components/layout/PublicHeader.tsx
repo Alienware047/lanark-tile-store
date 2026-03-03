@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AnimatePresence, motion, type Variants, type Transition } from "framer-motion";
 import { Menu, X, ChevronDown, Phone, Search, ShoppingCart, MapPin, Mail, Clock } from "lucide-react";
 import ThemeToggle from "@/components/theme/theme-toggle";
@@ -300,6 +300,33 @@ const SOCIALS = [
   { title: "LinkedIn", d: "M20.447 20.452h-3.554v-5.569c0-1.328-.475-2.236-1.986-2.236-1.081 0-1.722.722-2.004 1.418-.103.249-.129.597-.129.946v5.441h-3.554s.05-8.736 0-9.646h3.554v1.364c.429-.663 1.191-1.608 2.905-1.608 2.126 0 3.719 1.395 3.719 4.391v5.499zM5.337 8.855c-1.144 0-1.915-.759-1.915-1.71 0-.955.771-1.71 1.958-1.71 1.187 0 1.914.755 1.939 1.71 0 .951-.752 1.71-1.982 1.71zm1.581 11.597H3.635V9.861h3.283v10.591zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" },
 ];
 
+// ─── Body scroll lock hook ────────────────────────────────────────────────────
+
+function useScrollLock(locked: boolean) {
+  useEffect(() => {
+    if (locked) {
+      const scrollY = window.scrollY;
+      document.body.style.position = "fixed";
+      document.body.style.top = `-${scrollY}px`;
+      document.body.style.left = "0";
+      document.body.style.right = "0";
+      document.body.style.width = "100%";
+      document.body.style.overflowY = "scroll";
+    } else {
+      const scrollY = document.body.style.top;
+      document.body.style.position = "";
+      document.body.style.top = "";
+      document.body.style.left = "";
+      document.body.style.right = "";
+      document.body.style.width = "";
+      document.body.style.overflowY = "";
+      if (scrollY) {
+        window.scrollTo(0, parseInt(scrollY || "0") * -1);
+      }
+    }
+  }, [locked]);
+}
+
 // ─── Main header ─────────────────────────────────────────────────────────────
 
 export default function PremiumHeader() {
@@ -307,8 +334,16 @@ export default function PremiumHeader() {
   const [infoOpen, setInfoOpen]           = useState(false);
   const { cart, open: cartOpen, toggleCart } = useCart();
 
+  // Lock body scroll whenever any overlay panel is open — this prevents the
+  // page from shifting horizontally and stops the body from scrolling behind
+  // the overlay, which was causing the "empty section" layout glitch on mobile.
+  useScrollLock(offcanvasOpen || infoOpen);
+
   return (
-    <header className="sticky top-0 z-50 bg-[var(--color-card)] border-b border-[var(--border-strong)] shadow-sm">
+    // `overflow-x-clip` on the header itself prevents any child (e.g. the
+    // animating sidebar) from momentarily widening the scroll container
+    // before `position:fixed` fully kicks in.
+    <header className="sticky top-0 z-50 bg-[var(--color-card)] border-b border-[var(--border-strong)] shadow-sm overflow-x-clip">
       <div className="container mx-auto px-6 py-4 flex items-center justify-between">
 
         {/* LOGO */}
@@ -417,6 +452,7 @@ export default function PremiumHeader() {
               initial="hidden"
               animate="visible"
               exit="exit"
+              // `inset-0` + `fixed` — does NOT contribute to document width
               className="fixed inset-0 bg-black/50 z-40 xl:hidden"
               onClick={() => setOffcanvasOpen(false)}
             />
@@ -427,7 +463,11 @@ export default function PremiumHeader() {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="fixed left-0 top-0 h-full w-80 bg-[var(--color-card)] border-r border-[var(--color-border)] shadow-lg z-50 overflow-y-auto"
+              // KEY FIX: `max-w-[85vw]` prevents the panel from exceeding the
+              // viewport on very small phones; `w-80` stays for larger screens.
+              // `fixed` keeps it out of document flow so it can never add to
+              // the page's scroll width.
+              className="fixed left-0 top-0 h-full w-80 max-w-[85vw] bg-[var(--color-card)] border-r border-[var(--color-border)] shadow-lg z-50 overflow-y-auto overflow-x-hidden"
             >
               <div className="p-6">
                 <motion.div variants={childItem} className="flex items-center justify-between mb-6">
@@ -542,7 +582,9 @@ export default function PremiumHeader() {
               initial="hidden"
               animate="visible"
               exit="exit"
-              className="fixed right-0 top-0 h-full w-96 bg-[var(--color-card)] border-l border-[var(--color-border)] shadow-lg z-50 overflow-y-auto"
+              // KEY FIX: same treatment for the right panel — cap at 95vw on
+              // small screens and hide any internal overflow.
+              className="fixed right-0 top-0 h-full w-96 max-w-[95vw] bg-[var(--color-card)] border-l border-[var(--color-border)] shadow-lg z-50 overflow-y-auto overflow-x-hidden"
             >
               <div className="p-8">
                 <motion.button

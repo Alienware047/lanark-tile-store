@@ -19,7 +19,7 @@ export default function SitesLayout({
       <PublicHeader />
 
       {/* Main Content */}
-      <main className="flex-1">
+      <main >
         {children}
       </main>
 

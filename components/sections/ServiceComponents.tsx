@@ -25,7 +25,6 @@ export default function ServicesSection({
   const [index, setIndex] = useState(0);
   const [cardWidth, setCardWidth] = useState(0);
 
-  /* Compute card width from container */
   const compute = useCallback(() => {
     if (!containerRef.current) return;
     const vw = window.innerWidth;
@@ -40,11 +39,9 @@ export default function ServicesSection({
     return () => window.removeEventListener("resize", compute);
   }, [compute]);
 
-  /* Looped track: [last clone] [...all] [first clone] */
   const trackItems = [services[total - 1], ...services, services[0]];
-  const trackIndex = index + 1; // offset for clone at start
+  const trackIndex = index + 1;
 
-  /* Animate track */
   const animateTrack = useCallback(
     (ti: number, instant = false) => {
       if (!cardWidth) return;
@@ -56,10 +53,8 @@ export default function ServicesSection({
   );
 
   useEffect(() => { animateTrack(trackIndex); }, [index, animateTrack, trackIndex]);
-  // Re-snap on resize without animation
   useEffect(() => { if (cardWidth) animateTrack(trackIndex, true); }, [cardWidth]); // eslint-disable-line
 
-  /* Navigation */
   const stopAutoplay = () => { if (autoplayRef.current) clearInterval(autoplayRef.current); };
 
   const goTo = useCallback(
@@ -87,13 +82,11 @@ export default function ServicesSection({
   const next = useCallback(() => goTo(index + 1), [goTo, index]);
   const prev = useCallback(() => goTo(index - 1), [goTo, index]);
 
-  /* Autoplay */
   useEffect(() => {
     autoplayRef.current = setInterval(() => goTo(index + 1, true), 4000);
     return () => stopAutoplay();
   }, [index, goTo]); // eslint-disable-line
 
-  /* Drag */
   const onDragEnd = (_: unknown, info: { offset: { x: number } }) => {
     if (info.offset.x < -50) next();
     else if (info.offset.x > 50) prev();
@@ -101,6 +94,11 @@ export default function ServicesSection({
   };
 
   return (
+    /*
+      FIX: Added overflow-hidden so the animating slider track (which uses
+      negative translateX values and extends beyond the visible area) cannot
+      widen the document and cause horizontal page shift.
+    */
     <section
       className="relative w-full py-24 bg-cover bg-center overflow-hidden"
       style={{ backgroundImage: `url(${backgroundImage})` }}
@@ -113,7 +111,6 @@ export default function ServicesSection({
         <Reveal>
           <div className="mb-16">
             <div className="flex items-center gap-3 mb-3">
-              {/* FIX 1: PNG shape — needs fill wrapper + unoptimized */}
               <div className="relative w-6 h-6 shrink-0">
                 <Image src={subtitleImg} alt="" fill sizes="24px" className="object-contain" unoptimized />
               </div>
@@ -130,20 +127,17 @@ export default function ServicesSection({
         {/* Slider */}
         <div className="relative">
 
-          {/* Prev */}
-          <button onClick={prev} aria-label="Previous"
+          {/* <button onClick={prev} aria-label="Previous"
             className="absolute left-0 top-1/2 -translate-y-1/2 z-30 w-11 h-11 flex items-center justify-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-white hover:bg-[var(--color-primary)] hover:border-[var(--color-primary)] transition-all duration-200 text-lg">
             ←
           </button>
 
-          {/* Next */}
           <button onClick={next} aria-label="Next"
             className="absolute right-0 top-1/2 -translate-y-1/2 z-30 w-11 h-11 flex items-center justify-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-full text-white hover:bg-[var(--color-primary)] hover:border-[var(--color-primary)] transition-all duration-200 text-lg">
             →
-          </button>
+          </button> */}
 
-          {/* Viewport — mx-14 keeps cards clear of nav buttons */}
-          <div ref={containerRef} className="overflow-hidden mx-14">
+          <div ref={containerRef} className="overflow-hidden mx-1">
             <motion.div
               drag="x" onDragEnd={onDragEnd}
               dragElastic={0.08} dragConstraints={{ left: -99999, right: 99999 }}
@@ -154,9 +148,13 @@ export default function ServicesSection({
               {trackItems.map((service, i) => (
                 <div key={i}
                   style={{ width: cardWidth > 0 ? cardWidth : undefined, minWidth: 220, flexShrink: 0 }}
-                  className="relative pt-16 pb-8 px-6 rounded-2xlbg-black shadow-[0_8px_40px_rgba(0,0,0,0.3)] hover:-translate-y-2 transition-transform duration-300 flex flex-col items-center text-center min-h-[400px]"
+                  /*
+                    FIX: Original had `rounded-2xlbg-black` — a typo merging two
+                    class names with no space. Split into `rounded-2xl bg-black/60`
+                    so the card actually has a background and rounded corners.
+                  */
+                  className="relative pt-16 pb-8 px-6 rounded-2xl bg-black/60 shadow-[0_8px_40px_rgba(0,0,0,0.3)] hover:-translate-y-2 transition-transform duration-300 flex flex-col items-center text-center min-h-[400px]"
                 >
-                  {/* Icon — FIX 2: SVG needs fill wrapper + unoptimized */}
                   <div className="absolute -top-10 left-1/2 -translate-x-1/2">
                     <div className="w-20 h-20 bg-[var(--color-primary)] rounded-2xl flex items-center justify-center shadow-lg">
                       <div className="relative w-9 h-9">
@@ -165,11 +163,10 @@ export default function ServicesSection({
                     </div>
                   </div>
 
-                  <h3 className="text-white mt-4 font-semibold text-lg leading-snug ">
+                  <h3 className="text-white mt-4 font-semibold text-lg leading-snug">
                     {service.title}
                   </h3>
 
-                  {/* Thumb — FIX 3: fill needs positioned parent with explicit height */}
                   <div className="relative w-full h-44 mt-5 rounded-xl overflow-hidden">
                     <Image
                       src={service.thumb} alt={service.title} fill
