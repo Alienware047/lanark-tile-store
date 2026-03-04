@@ -37,7 +37,7 @@ export default async function ServiceDetailPage({ params }: Props) {
 
         <div className="relative z-10 h-full max-w-7xl mx-auto px-6 flex flex-col justify-end pb-16">
           {/* Breadcrumb slides in first */}
-          <Reveal delay={0.1} direction="up">
+          <Reveal delay={0.1} >
             <nav className="flex items-center gap-2 text-xs text-white/50 mb-5 font-medium tracking-wide">
               <Link href="/" className="hover:text-white transition">Home</Link>
               <ChevronRight className="w-3 h-3" />
@@ -48,7 +48,7 @@ export default async function ServiceDetailPage({ params }: Props) {
           </Reveal>
 
           {/* Category badge */}
-          <Reveal delay={0.2} direction="up">
+          <Reveal delay={0.2} >
             <span
               className="inline-block text-xs font-bold tracking-[0.25em] uppercase px-3 py-1 rounded-full mb-4 w-fit"
               style={{ background: "rgba(192,103,30,0.2)", color: "var(--color-primary)", border: "1px solid rgba(192,103,30,0.35)" }}
@@ -58,14 +58,14 @@ export default async function ServiceDetailPage({ params }: Props) {
           </Reveal>
 
           {/* Title — biggest impact, slightly more delay */}
-          <Reveal delay={0.3} direction="up">
+          <Reveal delay={0.3} >
             <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight mb-3">
               {service.title}
             </h1>
           </Reveal>
 
           {/* Tagline */}
-          <Reveal delay={0.42} direction="up">
+          <Reveal delay={0.42} >
             <p className="text-white/60 text-lg md:text-xl italic">{service.tagline}</p>
           </Reveal>
         </div>
@@ -75,7 +75,7 @@ export default async function ServiceDetailPage({ params }: Props) {
       <div className="border-b" style={{ background: "var(--color-primary)", borderColor: "rgba(0,0,0,0.1)" }}>
         <div className="max-w-7xl mx-auto px-6 py-5 grid grid-cols-3 divide-x divide-white/20">
           {service.stats.map((stat, i) => (
-            <Reveal key={i} delay={0.1 + i * 0.12} direction="up">
+            <Reveal key={i} delay={0.1 + i * 0.12}>
               <div className="flex flex-col items-center py-2 px-4">
                 <span className="text-2xl md:text-3xl font-extrabold text-white">{stat.value}</span>
                 <span className="text-xs text-white/70 mt-0.5 tracking-wide">{stat.label}</span>
@@ -94,18 +94,18 @@ export default async function ServiceDetailPage({ params }: Props) {
 
             {/* Overview */}
             <section className="mb-16">
-              <Reveal delay={0.1} direction="up">
+              <Reveal delay={0.1} >
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-px" style={{ background: "var(--color-primary)" }} />
                   <span className="text-xs font-bold tracking-[0.25em] uppercase" style={{ color: "var(--color-primary)" }}>Overview</span>
                 </div>
               </Reveal>
 
-              <Reveal delay={0.18} direction="up">
+              <Reveal delay={0.18} >
                 <p className="text-lg leading-relaxed text-[var(--text-muted)] mb-8">{service.description}</p>
               </Reveal>
 
-              <Reveal delay={0.26} direction="up">
+              <Reveal delay={0.26} >
                 <div className="relative w-full h-[340px] md:h-[420px] rounded-2xl overflow-hidden shadow-xl">
                   <Image src={service.thumb} alt={service.title} fill className="object-cover" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
@@ -115,7 +115,7 @@ export default async function ServiceDetailPage({ params }: Props) {
 
             {/* Features */}
             <section className="mb-16">
-              <Reveal delay={0.1} direction="up">
+              <Reveal delay={0.1} >
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-10 h-px" style={{ background: "var(--color-primary)" }} />
                   <span className="text-xs font-bold tracking-[0.25em] uppercase" style={{ color: "var(--color-primary)" }}>What's Included</span>
@@ -124,7 +124,7 @@ export default async function ServiceDetailPage({ params }: Props) {
 
               <div className="grid sm:grid-cols-2 gap-4">
                 {service.features.map((feat, i) => (
-                  <Reveal key={i} delay={0.08 + i * 0.07} direction="up">
+                  <Reveal key={i} delay={0.08 + i * 0.07} >
                     <div
                       className="flex items-start gap-3 p-4 rounded-xl border transition-all duration-300 hover:shadow-md"
                       style={{ borderColor: "var(--color-border)", background: "var(--color-card)" }}
@@ -139,7 +139,7 @@ export default async function ServiceDetailPage({ params }: Props) {
 
             {/* Process */}
             <section className="mb-16">
-              <Reveal delay={0.1} direction="up">
+              <Reveal delay={0.1} >
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-10 h-px" style={{ background: "var(--color-primary)" }} />
                   <span className="text-xs font-bold tracking-[0.25em] uppercase" style={{ color: "var(--color-primary)" }}>Our Process</span>
@@ -150,7 +150,7 @@ export default async function ServiceDetailPage({ params }: Props) {
                 <div className="absolute left-[27px] top-10 bottom-10 w-px hidden sm:block" style={{ background: "var(--color-border)" }} />
                 <div className="flex flex-col gap-8">
                   {service.process.map((step, i) => (
-                    <Reveal key={i} delay={i * 0.13} direction="left">
+                    <Reveal key={i} delay={i * 0.13}>
                       <div className="flex gap-6 items-start group">
                         <div
                           className="relative z-10 w-14 h-14 rounded-full flex items-center justify-center text-sm font-extrabold shrink-0 border-2 transition-all duration-300 group-hover:scale-110"
@@ -171,7 +171,7 @@ export default async function ServiceDetailPage({ params }: Props) {
 
             {/* FAQs */}
             <section>
-              <Reveal delay={0.1} direction="up">
+              <Reveal delay={0.1}>
                 <div className="flex items-center gap-3 mb-8">
                   <div className="w-10 h-px" style={{ background: "var(--color-primary)" }} />
                   <span className="text-xs font-bold tracking-[0.25em] uppercase" style={{ color: "var(--color-primary)" }}>FAQs</span>
@@ -180,7 +180,7 @@ export default async function ServiceDetailPage({ params }: Props) {
 
               <div className="flex flex-col gap-4">
                 {service.faqs.map((faq, i) => (
-                  <Reveal key={i} delay={i * 0.1} direction="up">
+                  <Reveal key={i} delay={i * 0.1}>
                     <details
                       className="group rounded-xl border overflow-hidden"
                       style={{ borderColor: "var(--color-border)", background: "var(--color-card)" }}
@@ -205,7 +205,7 @@ export default async function ServiceDetailPage({ params }: Props) {
             <div className="lg:sticky lg:top-28 flex flex-col gap-6">
 
               {/* All Services nav */}
-              <Reveal delay={0.2} direction="right">
+              <Reveal delay={0.2} >
                 <div className="rounded-2xl border overflow-hidden" style={{ borderColor: "var(--color-border)", background: "var(--color-card)" }}>
                   <div className="px-6 py-4 border-b" style={{ borderColor: "var(--color-border)", background: "var(--surface)" }}>
                     <h3 className="font-bold text-[var(--color-foreground)]">All Services</h3>
@@ -238,7 +238,7 @@ export default async function ServiceDetailPage({ params }: Props) {
               </Reveal>
 
               {/* Review card */}
-              <Reveal delay={0.35} direction="right">
+              <Reveal delay={0.35} >
                 <div className="rounded-2xl p-6 border" style={{ borderColor: "var(--color-border)", background: "var(--color-card)" }}>
                   <div className="flex gap-1 mb-2">
                     {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />)}
@@ -257,7 +257,7 @@ export default async function ServiceDetailPage({ params }: Props) {
               </Reveal>
 
               {/* CTA card */}
-              <Reveal delay={0.48} direction="right">
+              <Reveal delay={0.48} >
                 <div className="rounded-2xl p-7 text-white relative overflow-hidden" style={{ background: "var(--color-primary)" }}>
                   <div className="absolute -top-8 -right-8 w-32 h-32 rounded-full bg-white/10" />
                   <div className="absolute -bottom-4 -left-4 w-20 h-20 rounded-full bg-white/10" />
@@ -292,7 +292,7 @@ export default async function ServiceDetailPage({ params }: Props) {
       {/* ── RELATED SERVICES ──────────────────────────────────────────────── */}
       <section className="py-20 border-t" style={{ borderColor: "var(--color-border)", background: "var(--surface)" }}>
         <div className="max-w-7xl mx-auto px-6">
-          <Reveal delay={0.1} direction="up">
+          <Reveal delay={0.1} >
             <div className="flex items-center gap-3 mb-12">
               <div className="w-10 h-px" style={{ background: "var(--color-primary)" }} />
               <span className="text-xs font-bold tracking-[0.25em] uppercase" style={{ color: "var(--color-primary)" }}>More Services</span>
@@ -301,7 +301,7 @@ export default async function ServiceDetailPage({ params }: Props) {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {related.map((s, i) => (
-              <Reveal key={s.slug} delay={0.1 + i * 0.12} direction="up">
+              <Reveal key={s.slug} delay={0.1 + i * 0.12} >
                 <Link href={`/services/${s.slug}`} className="group relative rounded-2xl overflow-hidden h-[260px] block">
                   <Image src={s.thumb} alt={s.title} fill className="object-cover transition duration-700 group-hover:scale-105" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
