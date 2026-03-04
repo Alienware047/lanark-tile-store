@@ -29,7 +29,7 @@ export default function FaqPage() {
         <div className="absolute inset-y-0 left-0 w-1.5" style={{ background: "var(--color-primary)" }} />
 
         <div className="relative z-10 h-full max-w-7xl mx-auto px-6 flex flex-col justify-end pb-14">
-          <Reveal delay={0.1} direction="up">
+          <Reveal delay={0.1} >
             <nav className="flex items-center gap-2 text-xs text-white/50 mb-5 font-medium tracking-wide">
               <Link href="/" className="hover:text-white transition">Home</Link>
               <ChevronRight className="w-3 h-3" />
@@ -37,7 +37,7 @@ export default function FaqPage() {
             </nav>
           </Reveal>
 
-          <Reveal delay={0.2} direction="up">
+          <Reveal delay={0.2} >
             <span
               className="inline-block text-xs font-bold tracking-[0.25em] uppercase px-3 py-1 rounded-full mb-4 w-fit"
               style={{ background: "rgba(192,103,30,0.2)", color: "var(--color-primary)", border: "1px solid rgba(192,103,30,0.35)" }}
@@ -46,13 +46,13 @@ export default function FaqPage() {
             </span>
           </Reveal>
 
-          <Reveal delay={0.32} direction="up">
+          <Reveal delay={0.32}>
             <h1 className="text-4xl md:text-5xl font-extrabold text-white leading-tight mb-3">
               Frequently Asked Questions
             </h1>
           </Reveal>
 
-          <Reveal delay={0.44} direction="up">
+          <Reveal delay={0.44} >
             <p className="text-white/60 text-base md:text-lg italic">
               Everything you need to know — answered plainly and honestly.
             </p>
@@ -68,7 +68,7 @@ export default function FaqPage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex gap-1 overflow-x-auto py-3 scrollbar-hide">
             {allFaqCategories.map((cat, i) => (
-              <Reveal key={cat.slug} delay={i * 0.07} direction="up">
+              <Reveal key={cat.slug} delay={i * 0.07} >
                 <a
                   href={`#${cat.slug}`}
                   className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold whitespace-nowrap transition-all duration-200 hover:opacity-100"
@@ -99,7 +99,7 @@ export default function FaqPage() {
               <section key={cat.slug} id={cat.slug} className="scroll-mt-20">
 
                 {/* Category heading */}
-                <Reveal delay={0.1} direction="up">
+                <Reveal delay={0.1} >
                   <div className="flex items-center gap-3 mb-3">
                     <div className="w-10 h-px" style={{ background: "var(--color-primary)" }} />
                     <span
@@ -111,7 +111,7 @@ export default function FaqPage() {
                   </div>
                 </Reveal>
 
-                <Reveal delay={0.16} direction="up">
+                <Reveal delay={0.16}>
                   <div className="flex items-start gap-4 mb-8">
                     <div className="relative w-10 h-10 shrink-0 mt-0.5">
                       <Image
@@ -134,7 +134,7 @@ export default function FaqPage() {
                 </Reveal>
 
                 {/* Accordion — client component */}
-                <Reveal delay={0.22 + catIdx * 0.04} direction="up">
+                <Reveal delay={0.22 + catIdx * 0.04}>
                   <FaqAccordion category={cat} />
                 </Reveal>
 
@@ -147,7 +147,7 @@ export default function FaqPage() {
             <div className="lg:sticky lg:top-28 flex flex-col gap-6">
 
               {/* Jump-to nav */}
-              <Reveal delay={0.2} direction="right">
+              <Reveal delay={0.2} >
                 <div
                   className="rounded-2xl border overflow-hidden"
                   style={{ borderColor: "var(--color-border)", background: "var(--color-card)" }}
@@ -187,7 +187,7 @@ export default function FaqPage() {
               </Reveal>
 
               {/* Still have questions card */}
-              <Reveal delay={0.35} direction="right">
+              <Reveal delay={0.35} >
                 <div
                   className="rounded-2xl p-6 border"
                   style={{ borderColor: "var(--color-border)", background: "var(--color-card)" }}
@@ -221,7 +221,7 @@ export default function FaqPage() {
               </Reveal>
 
               {/* CTA card */}
-              <Reveal delay={0.48} direction="right">
+              <Reveal delay={0.48} >
                 <div
                   className="rounded-2xl p-7 text-white relative overflow-hidden"
                   style={{ background: "var(--color-primary)" }}
@@ -264,7 +264,7 @@ export default function FaqPage() {
         style={{ borderColor: "var(--color-border)", background: "var(--surface)" }}
       >
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <Reveal delay={0.1} direction="up">
+          <Reveal delay={0.1}>
             <div className="flex items-center justify-center gap-3 mb-6">
               <div className="w-10 h-px" style={{ background: "var(--color-primary)" }} />
               <span
@@ -277,7 +277,7 @@ export default function FaqPage() {
             </div>
           </Reveal>
 
-          <Reveal delay={0.18} direction="up">
+          <Reveal delay={0.18} >
             <h2
               className="text-3xl md:text-4xl font-extrabold mb-4"
               style={{ color: "var(--color-foreground)" }}
@@ -286,7 +286,7 @@ export default function FaqPage() {
             </h2>
           </Reveal>
 
-          <Reveal delay={0.26} direction="up">
+          <Reveal delay={0.26}>
             <p
               className="text-base leading-relaxed max-w-xl mx-auto mb-8"
               style={{ color: "var(--text-muted)" }}
@@ -295,7 +295,7 @@ export default function FaqPage() {
             </p>
           </Reveal>
 
-          <Reveal delay={0.34} direction="up">
+          <Reveal delay={0.34}>
             <Link
               href="/services"
               className="inline-flex items-center gap-2 px-8 py-4 rounded-full font-bold text-sm tracking-wide transition-all hover:opacity-90"
