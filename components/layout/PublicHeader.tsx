@@ -356,7 +356,7 @@ export default function PremiumHeader() {
           <HomeDropdown />
           <Link href="/about" className="px-4 py-2 rounded-lg text-[var(--color-foreground)] hover:text-[var(--color-primary)] hover:bg-[var(--primary-light)] transition font-medium text-sm">About</Link>
           <Link href="/services" className="px-4 py-2 rounded-lg text-[var(--color-foreground)] hover:text-[var(--color-primary)] hover:bg-[var(--primary-light)] transition font-medium text-sm">Services</Link>
-          <Dropdown title="Pages" links={[{ name: "Project", href: "/project" }, { name: "Team", href: "/team" }, { name: "Pricing", href: "/pricing" }, { name: "Gallery", href: "/gallery" }, { name: "FAQ", href: "/faq" }, { name: "Login", href: "/login" }]} />
+          <Dropdown title="Pages" links={[{ name: "Project", href: "/project" }, { name: "Team", href: "/team" }, { name: "Pricing", href: "/pricing" }, { name: "Gallery", href: "/gallery" }, { name: "FAQ", href: "/faq" }, { name: "Login", href: "/auth?view=login" }]} />
           <Dropdown title="Shop" links={[{ name: "Shop", href: "/shop" }, { name: "Checkout", href: "/checkout" }]} />
           <Link href="/contact" className="px-4 py-2 rounded-lg text-[var(--color-foreground)] hover:text-[var(--color-primary)] hover:bg-[var(--primary-light)] transition font-medium text-sm">Contact</Link>
         </nav>
@@ -512,7 +512,7 @@ export default function PremiumHeader() {
                       { name: "Pricing", href: "/pricing", onClick: () => setOffcanvasOpen(false) },
                       { name: "Gallery", href: "/gallery", onClick: () => setOffcanvasOpen(false) },
                       { name: "FAQ", href: "/faq", onClick: () => setOffcanvasOpen(false) },
-                      { name: "Login", href: "/login", onClick: () => setOffcanvasOpen(false) },
+                      { name: "Login", href: "/auth?view=login", onClick: () => setOffcanvasOpen(false) },
                     ]}
                   />
                   <MobileAccordion

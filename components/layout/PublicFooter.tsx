@@ -184,7 +184,7 @@ export default function Footer() {
                   className="flex items-center gap-2 text-[var(--text-muted)] hover:text-[var(--theme-primary)] transition"
                 >
                   <Mail size={18} className="text-[var(--theme-primary)] shrink-0" />
-                  floremh@gmail.com
+                  lanark@gmail.com
                 </a>
               </li>
             </ul>
@@ -197,7 +197,7 @@ export default function Footer() {
       <div className="footer-bottom bg-color2 py-4">
         <div className="container mx-auto flex flex-wrap justify-between items-center gap-3">
           <p className="text-[var(--text-muted)]">
-            © All Copyright 2024 by Florem
+            © All Copyright 2024 by Larnark
           </p>
 
           <div className="flex flex-wrap gap-4">

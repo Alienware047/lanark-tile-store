@@ -86,14 +86,14 @@ export default function ProjectSection() {
         </div>
 
         {/* View All */}
-        <div className="mt-14 flex justify-center">
+        {/* <div className="mt-14 flex justify-center">
           <Link
             href="/projects"
             className="px-8 py-4 rounded-full border-2 border-[var(--color-primary)] text-[var(--color-primary)] font-semibold hover:bg-[var(--color-primary)] hover:text-white transition"
           >
             View All Projects
           </Link>
-        </div>
+        </div> */}
       </div>
     </section>
   );
